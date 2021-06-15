@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 import 'package:dio/dio.dart';
@@ -10,7 +11,7 @@ class AuthController {
   final String host;
   final Dio client;
   String? encryptionKey;
-  String? symKey;
+  Uint8List? symKey;
   AuthController(this.host) : client = Dio(BaseOptions(baseUrl: host));
 
   Future<bool> login(String email, String password) async {

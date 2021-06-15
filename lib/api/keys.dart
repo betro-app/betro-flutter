@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 
@@ -16,7 +16,7 @@ class KeysController {
         await auth.client.get('/api/keys?include_echd_counts=true');
     final keys = KeysResponse.fromJson(response.data);
     final symKey = await symDecrypt(encryptionKey, keys.sym_key);
-    auth.symKey = base64Encode(symKey);
+    auth.symKey = Uint8List.fromList(symKey);
     return true;
   }
 }
