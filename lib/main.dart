@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+
+import './api/api.dart';
 
 void main() {
   runApp(MyApp());
@@ -47,6 +51,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  List<int>? profilePicture;
+  ApiController api = ApiController('https://betro.easycode.club');
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  void _init() async {
+    await api.auth.login('user1@example.com', 'user1');
+    await api.keys.fetchKeys();
+    final profilePicture = await api.account.fetchProfilePicture();
+    setState(() {
+      this.profilePicture = profilePicture;
+    });
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -93,6 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            if (profilePicture != null)
+              Image.memory(Uint8List.fromList(profilePicture!)),
             Text(
               'You have pushed the button this many times:',
             ),
