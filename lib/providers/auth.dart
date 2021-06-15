@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 const HOST_SHARED_KEY = 'HOST';
 const EMAIL_SHARED_KEY = 'EMAIL';
 
-final authProvider = StateNotifierProvider((ref) {
+final authProvider = StateNotifierProvider<Auth, AuthState>((ref) {
   return Auth();
 });
 
@@ -18,7 +18,7 @@ class Auth extends StateNotifier<AuthState> {
     if (host != null && email != null) {
       state = state.copyWith(
         isLoaded: true,
-        isLoggedIn: true,
+        isLoggedIn: false,
         host: host,
         email: email,
       );
@@ -28,6 +28,14 @@ class Auth extends StateNotifier<AuthState> {
         isLoggedIn: false,
       );
     }
+  }
+
+  Future<void> loggedIn(String host, String email) async {
+    state = state.copyWith(
+      host: host,
+      email: email,
+      isLoggedIn: true,
+    );
   }
 
   Future<void> saveToLocal() async {

@@ -1,8 +1,15 @@
+import '../constants.dart';
 import 'auth.dart';
 import 'account.dart';
 import 'keys.dart';
 
 class ApiController {
+  static ApiController instance = ApiController(DEFAULT_HOST);
+
+  static void setInstance(String host) {
+    instance = ApiController(host);
+  }
+
   String host;
   AuthController auth;
 
