@@ -8,13 +8,25 @@ import '../providers/auth.dart';
 import '../api/api.dart';
 
 class LoginScreen extends HookWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  Future<void> _submit(
+      BuildContext context, String host, String email, String password) async {
+    ApiController.setInstance(host);
+    await ApiController.instance.auth.login(email, password);
+    await ApiController.instance.keys.fetchKeys();
+    await context.read(authProvider.notifier).loggedIn(host, email);
+    await context.read(authProvider.notifier).saveToLocal();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final auth = useProvider(authProvider);
+    final _loading = useState<bool>(false);
+    final _auth = useProvider(authProvider);
     final _emailFieldController = useTextEditingController
-        .fromValue(TextEditingValue(text: auth.email ?? ''));
+        .fromValue(TextEditingValue(text: _auth.email ?? ''));
     final _hostFieldController = useTextEditingController
-        .fromValue(TextEditingValue(text: auth.host ?? DEFAULT_HOST));
+        .fromValue(TextEditingValue(text: _auth.host ?? DEFAULT_HOST));
     final _passwordFieldController =
         useTextEditingController.fromValue(TextEditingValue.empty);
     final _error = useState<String?>(null);
@@ -29,6 +41,7 @@ class LoginScreen extends HookWidget {
               decoration: InputDecoration(
                 labelText: 'Host',
               ),
+              enabled: !_loading.value,
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value != null && value.isEmpty) {
@@ -43,6 +56,7 @@ class LoginScreen extends HookWidget {
               decoration: InputDecoration(
                 labelText: 'Email',
               ),
+              enabled: !_loading.value,
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value != null && value.isEmpty) {
@@ -57,6 +71,7 @@ class LoginScreen extends HookWidget {
               decoration: InputDecoration(
                 labelText: 'Password',
               ),
+              enabled: !_loading.value,
               keyboardType: TextInputType.text,
               validator: (value) {
                 if (value != null && value.isEmpty) {
@@ -67,22 +82,26 @@ class LoginScreen extends HookWidget {
             ),
             if (_error.value != null) Text(_error.value!),
             ElevatedButton(
-              onPressed: () async {
-                try {
-                  ApiController.setInstance(_hostFieldController.text);
-                  await ApiController.instance.auth.login(
-                      _emailFieldController.text,
-                      _passwordFieldController.text);
-                  await context.read(authProvider.notifier).loggedIn(
-                      _hostFieldController.text, _emailFieldController.text);
-                  await context.read(authProvider.notifier).saveToLocal();
-                } on DioError catch (e) {
-                  _error.value =
-                      e.response?.data?['message'] ?? 'Unknown Error Occurred';
-                } catch (e) {
-                  _error.value = 'Unknown Error Occurred';
-                }
-              },
+              onPressed: _loading.value
+                  ? null
+                  : () async {
+                      try {
+                        _loading.value = true;
+                        await _submit(
+                          context,
+                          _hostFieldController.text,
+                          _emailFieldController.text,
+                          _passwordFieldController.text,
+                        );
+                      } on DioError catch (e) {
+                        _error.value = e.response?.data?['message'] ??
+                            'Unknown Error Occurred';
+                      } catch (e) {
+                        _error.value = 'Unknown Error Occurred';
+                      } finally {
+                        _loading.value = false;
+                      }
+                    },
               child: Text('Submit'),
             ),
           ],

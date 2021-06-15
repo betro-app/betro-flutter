@@ -10,15 +10,15 @@ class AppRouter {
 
   static final Handler _loginHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
-          LoginScreen());
+          const LoginScreen());
 
   static final Handler _homeHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
-          HomeScreen());
+          const HomeScreen());
 
   static final Handler _loadingHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, dynamic> params) =>
-          LoadingScreen());
+          const LoadingScreen());
 
   static void defineRoutes() {
     router.define('/', handler: _loadingHandler);

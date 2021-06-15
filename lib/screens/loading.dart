@@ -6,6 +6,8 @@ import '../router.dart';
 import '../providers/auth.dart';
 
 class LoadingScreen extends HookWidget {
+  const LoadingScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final auth = useProvider(authProvider);
