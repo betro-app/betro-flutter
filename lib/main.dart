@@ -9,7 +9,7 @@ import './router.dart';
 final _logger = Logger('main');
 
 void main() {
-  Logger.root.level = kReleaseMode ? Level.WARNING : Level.FINE;
+  Logger.root.level = kReleaseMode ? Level.WARNING : Level.FINER;
   PrintAppender().attachToLogger(Logger.root);
   _logger.fine('Application launched');
   AppRouter.defineRoutes();

@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:logging/logging.dart';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 
@@ -10,6 +12,31 @@ import './types/LoginRequest.dart';
 import './types/TokenResponse.dart';
 
 final _logger = Logger('api/auth');
+
+// Global options
+Future<CacheOptions> getCacheOptions() async {
+  final appDocDir = await getTemporaryDirectory();
+  _logger.info(appDocDir);
+  return CacheOptions(
+    // A default store is required for interceptor.
+    store: HiveCacheStore('${appDocDir.absolute.path}/hive'),
+    // Default.
+    policy: CachePolicy.request,
+    // Optional. Returns a cached response on error but for statuses 401 & 403.
+    hitCacheOnErrorExcept: [401, 403, 404],
+    // Optional. Overrides any HTTP directive to delete entry past this duration.
+    maxStale: const Duration(days: 7),
+    // Default. Allows 3 cache sets and ease cleanup.
+    priority: CachePriority.normal,
+    // Default. Body and headers encryption with your own algorithm.
+    cipher: null,
+    // Default. Key builder to retrieve requests.
+    keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+    // Default. Allows to cache POST requests.
+    // Overriding [keyBuilder] is strongly recommended.
+    allowPostMethod: false,
+  );
+}
 
 class AuthController {
   final String host;
@@ -24,6 +51,8 @@ class AuthController {
     if (_logger.level <= Level.FINER) {
       client.interceptors.add(LogInterceptor());
     }
+    getCacheOptions().then((value) =>
+        client.interceptors.add(DioCacheInterceptor(options: value)));
     final httpClientAdapter = Http2Adapter(
       ConnectionManager(
         idleTimeout: 100000,
