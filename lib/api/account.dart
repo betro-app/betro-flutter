@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 
 import './auth.dart';
+import './types/CountResponse.dart';
 import './types/WhoamiResponse.dart';
 
 final _logger = Logger('api/account');
@@ -38,5 +39,21 @@ class AccountController {
       utf8.decode(await symDecryptBuffer(symKey, whoami.first_name ?? '')),
       utf8.decode(await symDecryptBuffer(symKey, whoami.last_name ?? '')),
     );
+  }
+
+  Future<CountResponse?> fetchCounts() async {
+    const include_fields = [
+      'notifications',
+      'settings',
+      'groups',
+      'followers',
+      'followees',
+      'approvals',
+      'posts',
+    ];
+    final response = await auth.client
+        .get('/api/account/count?include_fields=${include_fields.join(",")}');
+    final count = CountResponse.fromJson(response.data);
+    return count;
   }
 }

@@ -24,6 +24,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
+      darkTheme: ThemeData(
+        primarySwatch: Colors.purple,
+      ),
       onGenerateRoute: AppRouter.router.generator,
     );
   }
