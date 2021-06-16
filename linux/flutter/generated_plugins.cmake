@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  file_selector_linux
   flutter_secure_storage
+  url_launcher_linux
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

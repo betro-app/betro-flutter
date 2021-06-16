@@ -15,18 +15,24 @@ import '../providers/profile.dart';
 
 class AppDrawerBadgeListTile extends StatelessWidget {
   const AppDrawerBadgeListTile(
-      {Key? key, this.child, this.trailing, this.showBadge = true})
+      {Key? key, this.child, this.trailing, this.onTap, this.showBadge = true})
       : super(key: key);
 
   final Widget? child;
 
   final Widget? trailing;
 
+  /// Called when the user taps this list tile.
+  ///
+  /// Inoperative if [enabled] is false.
+  final GestureTapCallback? onTap;
+
   final bool showBadge;
 
   @override
   Widget build(BuildContext context) => ListTile(
         trailing: trailing,
+        onTap: onTap,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -151,6 +157,9 @@ class AppDrawer extends HookWidget {
             AppDrawerBadgeListTile(
               showBadge: profile.isLoaded &&
                   (profile.first_name == null || profile.first_name!.isEmpty),
+              onTap: () {
+                Navigator.of(context).pushNamed('/profile');
+              },
               child: Text('Profile'),
             ),
             AppDrawerBadgeListTile(

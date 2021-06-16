@@ -18,6 +18,9 @@ class AuthController {
   Uint8List? symKey;
   AuthController(this.host) : client = Dio(BaseOptions(baseUrl: host)) {
     client.options.headers['accept-encoding'] = 'gzip, deflate, br';
+    client.options.headers['charset'] = 'UTF-8';
+    client.options.headers['accept'] = 'application/json, text/plain, */*';
+    client.options.headers['content-type'] = 'application/json';
     if (_logger.level <= Level.FINER) {
       client.interceptors.add(LogInterceptor());
     }
