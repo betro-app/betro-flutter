@@ -1,6 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constants.dart';
+
 const HOST_SHARED_KEY = 'HOST';
 const EMAIL_SHARED_KEY = 'EMAIL';
 
@@ -9,7 +11,7 @@ final authProvider = StateNotifierProvider<Auth, AuthState>((ref) {
 });
 
 class Auth extends StateNotifier<AuthState> {
-  Auth() : super(AuthState());
+  Auth() : super(AuthState(host: DEFAULT_HOST));
 
   Future<void> loadFromLocal() async {
     final instance = await SharedPreferences.getInstance();
@@ -30,14 +32,6 @@ class Auth extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> loggedIn(String host, String email) async {
-    state = state.copyWith(
-      host: host,
-      email: email,
-      isLoggedIn: true,
-    );
-  }
-
   Future<void> saveToLocal() async {
     final instance = await SharedPreferences.getInstance();
     final host = state.host;
@@ -46,6 +40,24 @@ class Auth extends StateNotifier<AuthState> {
       await instance.setString(HOST_SHARED_KEY, host);
       await instance.setString(EMAIL_SHARED_KEY, email);
     }
+  }
+
+  Future<void> resetLocal() async {
+    final instance = await SharedPreferences.getInstance();
+    await instance.remove(HOST_SHARED_KEY);
+    await instance.remove(EMAIL_SHARED_KEY);
+  }
+
+  Future<void> loggedIn(String host, String email) async {
+    state = state.copyWith(
+      host: host,
+      email: email,
+      isLoggedIn: true,
+    );
+  }
+
+  Future<void> loggedOut() async {
+    state = AuthState(host: DEFAULT_HOST);
   }
 }
 

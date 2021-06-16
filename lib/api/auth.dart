@@ -27,4 +27,11 @@ class AuthController {
     }
     return false;
   }
+
+  Future<void> logout() async {
+    // await client.post('/api/logout');
+    symKey = null;
+    encryptionKey = null;
+    client.options.headers['Authorization'] = null;
+  }
 }

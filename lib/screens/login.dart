@@ -17,6 +17,7 @@ class LoginScreen extends HookWidget {
     await ApiController.instance.keys.fetchKeys();
     await context.read(authProvider.notifier).loggedIn(host, email);
     await context.read(authProvider.notifier).saveToLocal();
+    await Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
@@ -30,6 +31,7 @@ class LoginScreen extends HookWidget {
     final _passwordFieldController =
         useTextEditingController.fromValue(TextEditingValue.empty);
     final _error = useState<String?>(null);
+    final _isMounted = useIsMounted();
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(20),
@@ -94,12 +96,18 @@ class LoginScreen extends HookWidget {
                           _passwordFieldController.text,
                         );
                       } on DioError catch (e) {
-                        _error.value = e.response?.data?['message'] ??
-                            'Unknown Error Occurred';
+                        if (_isMounted()) {
+                          _error.value = e.response?.data?['message'] ??
+                              'Unknown Error Occurred';
+                        }
                       } catch (e) {
-                        _error.value = 'Unknown Error Occurred';
+                        if (_isMounted()) {
+                          _error.value = 'Unknown Error Occurred';
+                        }
                       } finally {
-                        _loading.value = false;
+                        if (_isMounted()) {
+                          _loading.value = false;
+                        }
                       }
                     },
               child: Text('Submit'),
