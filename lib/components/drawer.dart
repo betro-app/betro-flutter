@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../api/api.dart';
+import '../hooks/auth.dart';
 import '../hooks/profile.dart';
 import '../providers/auth.dart';
 import '../providers/profile.dart';
@@ -14,8 +15,7 @@ class AppDrawer extends HookWidget {
 
   Future<void> _logout(BuildContext context) async {
     await ApiController.instance.auth.logout();
-    await context.read(authProvider.notifier).resetLocal();
-    await context.read(authProvider.notifier).loggedOut();
+    context.read(authProvider.notifier).loggedOut();
     await Navigator.pushReplacementNamed(context, '/login');
   }
 
@@ -36,6 +36,7 @@ class AppDrawer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final profile = useProvider(profileProvider);
+    final resetLocal = useResetLocal(context);
     final fetchProfilePicture = useFetchProfilePicture(context);
     final fetchProfile = useFetchProfile(context);
     useEffect(() {
@@ -59,7 +60,10 @@ class AppDrawer extends HookWidget {
             ),
             ListTile(
               title: Text('Logout'),
-              onTap: () => _logout(context),
+              onTap: () {
+                _logout(context);
+                resetLocal.call();
+              },
             )
           ],
         ),

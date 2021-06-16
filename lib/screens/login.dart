@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../constants.dart';
 import '../providers/auth.dart';
+import '../hooks/auth.dart';
 import '../api/api.dart';
+
+final _logger = Logger('login');
 
 class LoginScreen extends HookWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,19 +18,18 @@ class LoginScreen extends HookWidget {
     ApiController.setInstance(host);
     await ApiController.instance.auth.login(email, password);
     await ApiController.instance.keys.fetchKeys();
-    await context.read(authProvider.notifier).loggedIn(host, email);
-    await context.read(authProvider.notifier).saveToLocal();
-    await Navigator.pushReplacementNamed(context, '/home');
+    context.read(authProvider.notifier).loggedIn(host, email);
   }
 
   @override
   Widget build(BuildContext context) {
+    final saveToLocal = useSaveToLocal(context);
     final _loading = useState<bool>(false);
     final _auth = useProvider(authProvider);
     final _emailFieldController = useTextEditingController
         .fromValue(TextEditingValue(text: _auth.email ?? ''));
-    final _hostFieldController = useTextEditingController
-        .fromValue(TextEditingValue(text: _auth.host ?? DEFAULT_HOST));
+    final _hostFieldController =
+        useTextEditingController.fromValue(TextEditingValue(text: _auth.host));
     final _passwordFieldController =
         useTextEditingController.fromValue(TextEditingValue.empty);
     final _error = useState<String?>(null);
@@ -95,12 +97,16 @@ class LoginScreen extends HookWidget {
                           _emailFieldController.text,
                           _passwordFieldController.text,
                         );
-                      } on DioError catch (e) {
+                        saveToLocal.call();
+                        await Navigator.pushReplacementNamed(context, '/home');
+                      } on DioError catch (e, s) {
+                        _logger.warning(e.response.toString(), e, s);
                         if (_isMounted()) {
                           _error.value = e.response?.data?['message'] ??
                               'Unknown Error Occurred';
                         }
-                      } catch (e) {
+                      } catch (e, s) {
+                        _logger.warning(e.toString(), e, s);
                         if (_isMounted()) {
                           _error.value = 'Unknown Error Occurred';
                         }
