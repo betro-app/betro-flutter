@@ -8,7 +8,7 @@ import './router.dart';
 final _logger = Logger('main');
 
 void main() {
-  Logger.root.level = Level.ALL;
+  Logger.root.level = Level.FINE;
   PrintAppender().attachToLogger(Logger.root);
   _logger.fine('Application launched');
   AppRouter.defineRoutes();

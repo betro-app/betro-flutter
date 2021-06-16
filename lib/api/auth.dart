@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:dio_http2_adapter/dio_http2_adapter.dart';
 import 'package:logging/logging.dart';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 
@@ -15,16 +16,27 @@ class AuthController {
   final Dio client;
   String? encryptionKey;
   Uint8List? symKey;
-  AuthController(this.host) : client = Dio(BaseOptions(baseUrl: host));
+  AuthController(this.host) : client = Dio(BaseOptions(baseUrl: host)) {
+    client.options.headers['accept-encoding'] = 'gzip, deflate, br';
+    if (_logger.level <= Level.FINER) {
+      client.interceptors.add(LogInterceptor());
+    }
+    final httpClientAdapter = Http2Adapter(
+      ConnectionManager(
+        idleTimeout: 10000,
+      ),
+    );
+    client.httpClientAdapter = httpClientAdapter;
+  }
 
   void setToken(String token) {
     if (token.isNotEmpty) {
-      client.options.headers['Authorization'] = 'Bearer $token';
+      client.options.headers['authorization'] = 'Bearer $token';
     }
   }
 
   String? getToken() {
-    final String? bearer = client.options.headers['Authorization'];
+    final String? bearer = client.options.headers['authorization'];
     if (bearer != null && bearer.isNotEmpty) {
       final splitted = bearer.split('Bearer');
       _logger.fine(splitted);
@@ -48,6 +60,6 @@ class AuthController {
     // await client.post('/api/logout');
     symKey = null;
     encryptionKey = null;
-    client.options.headers['Authorization'] = null;
+    client.options.headers['authorization'] = null;
   }
 }
