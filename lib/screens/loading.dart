@@ -25,7 +25,10 @@ class LoadingScreen extends HookWidget {
     }, [auth.isLoaded, auth.isLoggedIn]);
     return Scaffold(
       body: Center(
-        child: Text('Loading'),
+        child: Image.asset(
+          'assets/icon/ic_launcher.png',
+          width: 96,
+        ),
       ),
     );
   }
