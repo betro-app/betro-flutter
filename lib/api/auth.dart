@@ -23,10 +23,17 @@ class AuthController {
     }
     final httpClientAdapter = Http2Adapter(
       ConnectionManager(
-        idleTimeout: 10000,
+        idleTimeout: 100000,
       ),
     );
     client.httpClientAdapter = httpClientAdapter;
+  }
+
+  Dio get http1Client {
+    final dio = Dio(BaseOptions(baseUrl: host));
+    dio.options = client.options;
+    dio.interceptors.addAll(client.interceptors);
+    return dio;
   }
 
   void setToken(String token) {
