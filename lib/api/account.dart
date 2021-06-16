@@ -7,7 +7,6 @@ import 'package:betro_dart_lib/betro_dart_lib.dart';
 import './auth.dart';
 import './types/CountResponse.dart';
 import './types/UserProfilePutRequest.dart';
-import './types/UserProfilePostRequest.dart';
 import './types/UserProfileResponse.dart';
 import './types/WhoamiResponse.dart';
 
@@ -20,12 +19,19 @@ class AccountController {
   Future<List<int>?> fetchProfilePicture() async {
     final symKey = auth.symKey;
     if (symKey == null) return null;
-    final response = await auth.http1Client.get<String>(
-        '/api/account/profile_picture',
-        options: Options(responseType: ResponseType.plain));
-    final data = response.data;
-    if (data != null) {
-      return await symDecryptBuffer(symKey, data);
+    try {
+      final response = await auth.http1Client.get<String>(
+          '/api/account/profile_picture',
+          options: Options(responseType: ResponseType.plain));
+      final data = response.data;
+      if (data != null && data.isNotEmpty) {
+        return await symDecryptBuffer(symKey, data);
+      }
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+      rethrow;
     }
     return null;
   }
@@ -33,15 +39,28 @@ class AccountController {
   Future<WhoamiResponse?> fetchWhoAmi() async {
     final symKey = auth.symKey;
     if (symKey == null) return null;
-    final response = await auth.client.get('/api/account/whoami');
-    final whoami = WhoamiResponse.fromJson(response.data);
-    return WhoamiResponse(
-      whoami.user_id,
-      whoami.username,
-      whoami.email,
-      utf8.decode(await symDecryptBuffer(symKey, whoami.first_name ?? '')),
-      utf8.decode(await symDecryptBuffer(symKey, whoami.last_name ?? '')),
-    );
+    try {
+      final response = await auth.client.get('/api/account/whoami');
+      final whoami = WhoamiResponse.fromJson(response.data);
+      final first_name = whoami.first_name;
+      final last_name = whoami.last_name;
+      return WhoamiResponse(
+        whoami.user_id,
+        whoami.username,
+        whoami.email,
+        (first_name == null || first_name.isEmpty)
+            ? null
+            : utf8.decode(await symDecryptBuffer(symKey, first_name)),
+        (last_name == null || last_name.isEmpty)
+            ? null
+            : utf8.decode(await symDecryptBuffer(symKey, last_name)),
+      );
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+      rethrow;
+    }
   }
 
   Future<CountResponse?> fetchCounts() async {
@@ -85,6 +104,31 @@ class AccountController {
           ? null
           : await symDecrypt(symDecrypted, profile_picture),
     );
+  }
+
+  Future<UserProfile?> createProfile({
+    String? first_name,
+    String? last_name,
+    List<int>? profile_picture,
+  }) async {
+    final symKey = auth.symKey;
+    if (symKey == null) return null;
+    final request = UserProfilePutRequest(
+      first_name: first_name == null
+          ? null
+          : await symEncryptBuffer(symKey, utf8.encode(first_name)),
+      last_name: last_name == null
+          ? null
+          : await symEncryptBuffer(symKey, utf8.encode(last_name)),
+      profile_picture: profile_picture == null
+          ? null
+          : await symEncryptBuffer(symKey, profile_picture),
+    );
+    _logger.finer(jsonEncode(request));
+    final response = await auth.http1Client
+        .post('/api/account/profile', data: jsonEncode(request));
+    final profile = UserProfileResponse.fromJson(response.data);
+    return _transformProfileResponse(profile);
   }
 
   Future<UserProfile?> updateProfile({

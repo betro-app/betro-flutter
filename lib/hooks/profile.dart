@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../api/api.dart';
+import '../api/types/UserProfileResponse.dart';
 import '../providers/profile.dart';
 import 'common.dart';
 
@@ -16,7 +17,8 @@ LoadingVoidCallback useFetchProfilePicture(BuildContext context) {
     ApiController.instance.account.fetchProfilePicture().then((value) {
       context.read(profileProvider.notifier).profilePictureLoaded(value);
       loading.value = false;
-    }).catchError((e) {
+    }).catchError((e, s) {
+      _logger.warning(e.toString(), e, s);
       loading.value = false;
     });
   }, []);
@@ -38,7 +40,8 @@ LoadingVoidCallback useFetchProfile(BuildContext context) {
             );
       }
       loading.value = false;
-    }).catchError((e) {
+    }).catchError((e, s) {
+      _logger.warning(e.toString(), e, s);
       loading.value = false;
     });
   }, []);
@@ -56,11 +59,21 @@ LoadingCallback<UpdateProfile> useUpdateProfile(BuildContext context) {
   var loading = useState<bool>(false);
   final updateProfile = useCallback((UpdateProfile profile) async {
     loading.value = true;
-    final value = await ApiController.instance.account.updateProfile(
-      first_name: profile.first_name,
-      last_name: profile.last_name,
-      profile_picture: profile.profile_picture,
-    );
+    final oldProfile = context.read(profileProvider);
+    UserProfile? value;
+    if (oldProfile.first_name == null || oldProfile.first_name!.isEmpty) {
+      value = await ApiController.instance.account.createProfile(
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        profile_picture: profile.profile_picture,
+      );
+    } else {
+      value = await ApiController.instance.account.updateProfile(
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        profile_picture: profile.profile_picture,
+      );
+    }
     if (value != null) {
       context.read(profileProvider.notifier).profileLoaded(
             first_name: value.first_name,
