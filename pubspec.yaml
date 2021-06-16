@@ -36,7 +36,6 @@ dependencies:
   json_annotation: ^4.0.1
   shared_preferences: ^2.0.6
   fluro: ^2.0.3
-  biometric_storage: ^2.0.2
   logging: ^1.0.1
   logging_appenders: ^1.0.0
   flutter_secure_storage: ^4.2.0

@@ -14,7 +14,7 @@ LoadingVoidCallback useFetchProfilePicture(BuildContext context) {
       context.read(profileProvider.notifier).profilePictureLoaded(value);
       loading.value = false;
     }).catchError((e) {
-      loading.value = true;
+      loading.value = false;
     });
   }, []);
   return LoadingVoidCallback(loading.value, fetchProfilePicture);
@@ -36,7 +36,7 @@ LoadingVoidCallback useFetchProfile(BuildContext context) {
       }
       loading.value = false;
     }).catchError((e) {
-      loading.value = true;
+      loading.value = false;
     });
   }, []);
   return LoadingVoidCallback(loading.value, fetchProfile);

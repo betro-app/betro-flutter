@@ -26,9 +26,12 @@ LoadingVoidCallback useLoadFromLocal(BuildContext context) {
       _logger.fine(host);
       if (host != null && email != null) {
         final storage = FlutterSecureStorage();
-        final token = await storage.read(key: TOKEN_SHARED_KEY);
-        final encryptionKey =
-            await storage.read(key: ENCRYPTION_KEY_SHARED_KEY);
+        final storageReads = await Future.wait([
+          storage.read(key: TOKEN_SHARED_KEY),
+          storage.read(key: ENCRYPTION_KEY_SHARED_KEY)
+        ]);
+        final token = storageReads[0];
+        final encryptionKey = storageReads[1];
         _logger.fine(token);
         _logger.fine(encryptionKey);
         if (token != null && encryptionKey != null) {

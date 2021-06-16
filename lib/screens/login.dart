@@ -35,98 +35,101 @@ class LoginScreen extends HookWidget {
     final _saveCredentialsController = useState<bool>(false);
     final _error = useState<String?>(null);
     final _isMounted = useIsMounted();
-    return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _hostFieldController,
-              obscureText: false,
-              decoration: InputDecoration(
-                labelText: 'Host',
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _hostFieldController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Host',
+                ),
+                enabled: !_loading.value,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
               ),
-              enabled: !_loading.value,
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value != null && value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: _emailFieldController,
-              obscureText: false,
-              decoration: InputDecoration(
-                labelText: 'Email',
+              TextFormField(
+                controller: _emailFieldController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                ),
+                enabled: !_loading.value,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
               ),
-              enabled: !_loading.value,
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value != null && value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: _passwordFieldController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
+              TextFormField(
+                controller: _passwordFieldController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                ),
+                enabled: !_loading.value,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
               ),
-              enabled: !_loading.value,
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value != null && value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-            ),
-            CheckboxListTile(
-              value: _saveCredentialsController.value,
-              onChanged: (value) =>
-                  _saveCredentialsController.value = value ?? false,
-              title: const Text('Save user credentials?'),
-            ),
-            if (_error.value != null) Text(_error.value!),
-            ElevatedButton(
-              onPressed: _loading.value
-                  ? null
-                  : () async {
-                      try {
-                        _loading.value = true;
-                        await _submit(
-                          context,
-                          _hostFieldController.text,
-                          _emailFieldController.text,
-                          _passwordFieldController.text,
-                        );
-                        await saveToLocal
-                            .call(_saveCredentialsController.value);
-                        await Navigator.pushReplacementNamed(context, '/home');
-                      } on DioError catch (e, s) {
-                        _logger.warning(e.response.toString(), e, s);
-                        if (_isMounted()) {
-                          _error.value = e.response?.data?['message'] ??
-                              'Unknown Error Occurred';
+              CheckboxListTile(
+                value: _saveCredentialsController.value,
+                onChanged: (value) =>
+                    _saveCredentialsController.value = value ?? false,
+                title: const Text('Save user credentials?'),
+              ),
+              if (_error.value != null) Text(_error.value!),
+              ElevatedButton(
+                onPressed: _loading.value
+                    ? null
+                    : () async {
+                        try {
+                          _loading.value = true;
+                          await _submit(
+                            context,
+                            _hostFieldController.text,
+                            _emailFieldController.text,
+                            _passwordFieldController.text,
+                          );
+                          await saveToLocal
+                              .call(_saveCredentialsController.value);
+                          await Navigator.pushReplacementNamed(
+                              context, '/home');
+                        } on DioError catch (e, s) {
+                          _logger.warning(e.response.toString(), e, s);
+                          if (_isMounted()) {
+                            _error.value = e.response?.data?['message'] ??
+                                'Unknown Error Occurred';
+                          }
+                        } catch (e, s) {
+                          _logger.warning(e.toString(), e, s);
+                          if (_isMounted()) {
+                            _error.value = 'Unknown Error Occurred';
+                          }
+                        } finally {
+                          if (_isMounted()) {
+                            _loading.value = false;
+                          }
                         }
-                      } catch (e, s) {
-                        _logger.warning(e.toString(), e, s);
-                        if (_isMounted()) {
-                          _error.value = 'Unknown Error Occurred';
-                        }
-                      } finally {
-                        if (_isMounted()) {
-                          _loading.value = false;
-                        }
-                      }
-                    },
-              child: Text('Submit'),
-            ),
-          ],
+                      },
+                child: Text('Submit'),
+              ),
+            ],
+          ),
         ),
       ),
     );
