@@ -9,6 +9,7 @@ import 'package:logging/logging.dart';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 
 import './types/LoginRequest.dart';
+import './types/RegisterRequest.dart';
 import './types/TokenResponse.dart';
 
 final _logger = Logger('api/auth');
@@ -100,5 +101,48 @@ class AuthController {
     symKey = null;
     encryptionKey = null;
     client.options.headers['authorization'] = null;
+  }
+
+  Future<bool> isAvailableUsername(String username) async {
+    try {
+      final response = await client
+          .get('/api/register/available/username?username=$username');
+      return response.data['available'] == true;
+    } on DioError catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> isAvailableEmail(String email) async {
+    try {
+      final response =
+          await client.get('/api/register/available/email?email=$email');
+      return response.data['available'] == true;
+    } on DioError catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> register(String username, String email, String password) async {
+    final masterKey = await getMasterKey(email, password);
+    final masterHash = await getMasterHash(masterKey, password);
+    final encryptionKey = await getEncryptionKeys(masterKey);
+    final symKey = generateSymKey();
+    final encryptedSymKey =
+        await symEncrypt(encryptionKey, base64Decode(symKey));
+    final request = RegisterRequest(
+      email: email,
+      username: username,
+      master_hash: masterHash,
+      sym_key: encryptedSymKey,
+      inhibit_login: true,
+    );
+    final response =
+        await client.post('/api/register', data: jsonEncode(request));
+    final String? token = response.data?['token'];
+    if (token != null) {
+      setToken(token);
+      this.encryptionKey = encryptionKey;
+    }
   }
 }

@@ -8,15 +8,15 @@ import '../providers/auth.dart';
 import '../hooks/auth.dart';
 import '../api/api.dart';
 
-final _logger = Logger('screens/login');
+final _logger = Logger('screens/register');
 
-class LoginScreen extends HookWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends HookWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
-  Future<void> _submit(
-      BuildContext context, String host, String email, String password) async {
+  Future<void> _submit(BuildContext context, String host, String username,
+      String email, String password) async {
     ApiController.setInstance(host);
-    await ApiController.instance.auth.login(email, password);
+    await ApiController.instance.auth.register(username, email, password);
     await ApiController.instance.keys.fetchKeys();
     context.read(authProvider.notifier).loggedIn(host, email);
   }
@@ -26,11 +26,15 @@ class LoginScreen extends HookWidget {
     final saveToLocal = useSaveToLocal(context);
     final _loading = useState<bool>(false);
     final _auth = useProvider(authProvider);
-    final _emailFieldController = useTextEditingController
-        .fromValue(TextEditingValue(text: _auth.email ?? ''));
+    final _emailFieldController =
+        useTextEditingController.fromValue(TextEditingValue(text: ''));
+    final _usernameFieldController =
+        useTextEditingController.fromValue(TextEditingValue(text: ''));
     final _hostFieldController =
         useTextEditingController.fromValue(TextEditingValue(text: _auth.host));
     final _passwordFieldController =
+        useTextEditingController.fromValue(TextEditingValue.empty);
+    final _confirmPasswordFieldController =
         useTextEditingController.fromValue(TextEditingValue.empty);
     final _saveCredentialsController = useState<bool>(false);
     final _error = useState<String?>(null);
@@ -46,6 +50,21 @@ class LoginScreen extends HookWidget {
                 obscureText: false,
                 decoration: InputDecoration(
                   labelText: 'Host',
+                ),
+                enabled: !_loading.value,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _usernameFieldController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: 'Username',
                 ),
                 enabled: !_loading.value,
                 keyboardType: TextInputType.text,
@@ -86,6 +105,21 @@ class LoginScreen extends HookWidget {
                   return null;
                 },
               ),
+              TextFormField(
+                controller: _confirmPasswordFieldController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                ),
+                enabled: !_loading.value,
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value != null && value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
               CheckboxListTile(
                 value: _saveCredentialsController.value,
                 onChanged: (value) =>
@@ -94,7 +128,9 @@ class LoginScreen extends HookWidget {
               ),
               if (_error.value != null) Text(_error.value!),
               ElevatedButton(
-                onPressed: _loading.value
+                onPressed: (_loading.value ||
+                        _confirmPasswordFieldController.value !=
+                            _passwordFieldController.value)
                     ? null
                     : () async {
                         try {
@@ -102,6 +138,7 @@ class LoginScreen extends HookWidget {
                           await _submit(
                             context,
                             _hostFieldController.text,
+                            _usernameFieldController.text,
                             _emailFieldController.text,
                             _passwordFieldController.text,
                           );
@@ -127,14 +164,6 @@ class LoginScreen extends HookWidget {
                         }
                       },
                 child: Text('Submit'),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                child: GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed('/register'),
-                  child: Text('Register',
-                      style: Theme.of(context).accentTextTheme.subtitle1),
-                ),
               ),
             ],
           ),
