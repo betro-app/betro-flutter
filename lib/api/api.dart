@@ -1,6 +1,7 @@
 import '../constants.dart';
 import 'auth.dart';
 import 'account.dart';
+import 'feed.dart';
 import 'keys.dart';
 
 class ApiController {
@@ -16,5 +17,6 @@ class ApiController {
   ApiController(this.host) : auth = AuthController(host);
 
   AccountController get account => AccountController(auth);
+  FeedController get feed => FeedController(auth);
   KeysController get keys => KeysController(auth);
 }
