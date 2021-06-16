@@ -32,6 +32,7 @@ class LoginScreen extends HookWidget {
         useTextEditingController.fromValue(TextEditingValue(text: _auth.host));
     final _passwordFieldController =
         useTextEditingController.fromValue(TextEditingValue.empty);
+    final _saveCredentialsController = useState<bool>(false);
     final _error = useState<String?>(null);
     final _isMounted = useIsMounted();
     return Scaffold(
@@ -84,6 +85,12 @@ class LoginScreen extends HookWidget {
                 return null;
               },
             ),
+            CheckboxListTile(
+              value: _saveCredentialsController.value,
+              onChanged: (value) =>
+                  _saveCredentialsController.value = value ?? false,
+              title: const Text('Save user credentials?'),
+            ),
             if (_error.value != null) Text(_error.value!),
             ElevatedButton(
               onPressed: _loading.value
@@ -97,7 +104,8 @@ class LoginScreen extends HookWidget {
                           _emailFieldController.text,
                           _passwordFieldController.text,
                         );
-                        saveToLocal.call();
+                        await saveToLocal
+                            .call(_saveCredentialsController.value);
                         await Navigator.pushReplacementNamed(context, '/home');
                       } on DioError catch (e, s) {
                         _logger.warning(e.response.toString(), e, s);

@@ -16,7 +16,7 @@ const TOKEN_SHARED_KEY = 'TOKEN';
 
 final _logger = Logger('hooks/auth');
 
-LoadingCallback useLoadFromLocal(BuildContext context) {
+LoadingVoidCallback useLoadFromLocal(BuildContext context) {
   var loading = useState<bool>(false);
   final loadFromLocal = useCallback(() {
     loading.value = true;
@@ -34,8 +34,12 @@ LoadingCallback useLoadFromLocal(BuildContext context) {
         if (token != null && encryptionKey != null) {
           ApiController.instance.auth.setToken(token);
           ApiController.instance.auth.encryptionKey = encryptionKey;
-          await ApiController.instance.keys.fetchKeys();
-          context.read(authProvider.notifier).loggedIn(host, email);
+          try {
+            await ApiController.instance.keys.fetchKeys();
+            context.read(authProvider.notifier).loggedIn(host, email);
+          } catch (e) {
+            context.read(authProvider.notifier).loggedOut();
+          }
         } else {
           context.read(authProvider.notifier).loaded(host, email);
         }
@@ -48,39 +52,41 @@ LoadingCallback useLoadFromLocal(BuildContext context) {
       loading.value = false;
     });
   }, []);
-  return LoadingCallback(loading.value, loadFromLocal);
+  return LoadingVoidCallback(loading.value, loadFromLocal);
 }
 
-LoadingCallback useSaveToLocal(BuildContext context) {
+LoadingCallback<bool> useSaveToLocal(BuildContext context) {
   var loading = useState<bool>(false);
-  final auth = useProvider(authProvider);
-  final saveToLocal = useCallback(() {
+  final saveToLocal = useCallback((bool saveSecure) async {
     loading.value = true;
-    SharedPreferences.getInstance().then((instance) async {
-      final email = auth.email;
-      await instance.setString(HOST_SHARED_KEY, auth.host);
-      if (email != null) {
-        await instance.setString(EMAIL_SHARED_KEY, email);
+    final instance = await SharedPreferences.getInstance();
+    final auth = context.read(authProvider);
+    final email = auth.email;
+    final host = auth.host;
+    await instance.setString(HOST_SHARED_KEY, host);
+    _logger.fine(email);
+    if (email != null) {
+      await instance.setString(EMAIL_SHARED_KEY, email);
+      _logger.fine(saveSecure);
+      if (saveSecure) {
+        final encryptionKey = ApiController.instance.auth.encryptionKey;
+        final token = ApiController.instance.auth.getToken();
+        _logger.fine(token);
+        _logger.fine(encryptionKey);
+        if (token != null && encryptionKey != null) {
+          final storage = FlutterSecureStorage();
+          await storage.write(key: TOKEN_SHARED_KEY, value: token);
+          await storage.write(
+              key: ENCRYPTION_KEY_SHARED_KEY, value: encryptionKey);
+        }
       }
-      final encryptionKey = ApiController.instance.auth.encryptionKey;
-      final token = ApiController.instance.auth.getToken();
-      _logger.fine(token);
-      _logger.fine(encryptionKey);
-      if (token != null && encryptionKey != null) {
-        final storage = FlutterSecureStorage();
-        await storage.write(key: TOKEN_SHARED_KEY, value: token);
-        await storage.write(
-            key: ENCRYPTION_KEY_SHARED_KEY, value: encryptionKey);
-      }
-      loading.value = false;
-    }).catchError((e) {
-      loading.value = false;
-    });
+    }
+    loading.value = false;
   }, []);
-  return LoadingCallback(loading.value, saveToLocal);
+  return LoadingCallback<bool>(loading.value, saveToLocal);
 }
 
-LoadingCallback useResetLocal(BuildContext context) {
+LoadingVoidCallback useResetLocal(BuildContext context) {
   var loading = useState<bool>(false);
   final resetLocal = useCallback(() {
     loading.value = true;
@@ -94,5 +100,5 @@ LoadingCallback useResetLocal(BuildContext context) {
       loading.value = false;
     });
   }, []);
-  return LoadingCallback(loading.value, resetLocal);
+  return LoadingVoidCallback(loading.value, resetLocal);
 }

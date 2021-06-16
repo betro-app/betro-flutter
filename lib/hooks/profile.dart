@@ -6,7 +6,7 @@ import '../api/api.dart';
 import '../providers/profile.dart';
 import 'common.dart';
 
-LoadingCallback useFetchProfilePicture(BuildContext context) {
+LoadingVoidCallback useFetchProfilePicture(BuildContext context) {
   var loading = useState<bool>(false);
   final fetchProfilePicture = useCallback(() {
     loading.value = true;
@@ -17,10 +17,10 @@ LoadingCallback useFetchProfilePicture(BuildContext context) {
       loading.value = true;
     });
   }, []);
-  return LoadingCallback(loading.value, fetchProfilePicture);
+  return LoadingVoidCallback(loading.value, fetchProfilePicture);
 }
 
-LoadingCallback useFetchProfile(BuildContext context) {
+LoadingVoidCallback useFetchProfile(BuildContext context) {
   var loading = useState<bool>(false);
   final fetchProfile = useCallback(() {
     loading.value = true;
@@ -39,5 +39,5 @@ LoadingCallback useFetchProfile(BuildContext context) {
       loading.value = true;
     });
   }, []);
-  return LoadingCallback(loading.value, fetchProfile);
+  return LoadingVoidCallback(loading.value, fetchProfile);
 }
