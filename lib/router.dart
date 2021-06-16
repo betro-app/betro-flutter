@@ -31,7 +31,8 @@ class AppRouter {
           const ProfileScreen());
 
   static void defineRoutes() {
-    router.define('/', handler: _loadingHandler);
+    router.define('/',
+        handler: _loadingHandler, transitionType: TransitionType.none);
     router.define('/login', handler: _loginHandler);
     router.define('/register', handler: _registerHandler);
     router.define('/home', handler: _homeHandler);

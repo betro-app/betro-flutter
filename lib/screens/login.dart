@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../providers/auth.dart';
 import '../hooks/auth.dart';
 import '../api/api.dart';
+import '../components/password.dart';
 
 final _logger = Logger('screens/login');
 
@@ -71,20 +72,10 @@ class LoginScreen extends HookWidget {
                   return null;
                 },
               ),
-              TextFormField(
+              PasswordFormField(
                 controller: _passwordFieldController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                ),
                 enabled: !_loading.value,
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value != null && value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
+                labelText: 'Password',
               ),
               CheckboxListTile(
                 value: _saveCredentialsController.value,
