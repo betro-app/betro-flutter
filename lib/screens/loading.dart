@@ -24,6 +24,9 @@ class LoadingScreen extends HookWidget {
       }
     }, [auth.isLoaded, auth.isLoggedIn]);
     return Scaffold(
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? Theme.of(context).primaryColor
+          : Colors.black,
       body: Center(
         child: Image.asset(
           'assets/icon/ic_launcher.png',
