@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:betro_dart_lib/betro_dart_lib.dart';
+import 'package:logging/logging.dart';
 
 import './types/FeedResource.dart';
 import './types/PostResponse.dart';
 import './types/ProfileGrantRow.dart';
 import './types/PostUserResponse.dart';
 import './types/PostsFeedResponse.dart';
+
+final _logger = Logger('api/helper');
 
 typedef Future<Uint8List?> PostToSymKeyFunction(
     String encryptionKey,
@@ -72,30 +75,40 @@ Future<PostResource> parsePost(PostResponse post, Uint8List sym_key) async {
 Future<List<PostResource>?> transformPostFeed(
     String encryptionKey, PostsFeedResponse feed,
     [PostToSymKeyFunction postToSymKey = feedDefaultTransform]) async {
-  final posts = <PostResource>[];
   final users = <String, PostResourceUser>{};
+  final userFutures = <String, Future<UserProfile>>{};
   for (final user_id in feed.users.keys) {
     final user = feed.users[user_id];
     if (user != null) {
-      final parsedUser = await parseUserGrant(encryptionKey, user);
-      users[user_id] = PostResourceUser(
-        username: user.username,
-        first_name: parsedUser.first_name,
-        last_name: parsedUser.last_name,
-        profile_picture: parsedUser.profile_picture,
-      );
+      userFutures[user_id] = parseUserGrant(encryptionKey, user);
     }
   }
+  await Future.wait(userFutures.values);
+  for (final user_id in userFutures.keys) {
+    final user = feed.users[user_id];
+    if (user != null) {
+      final parsedUser = await userFutures[user_id];
+      if (parsedUser != null) {
+        users[user_id] = PostResourceUser(
+          username: user.username,
+          first_name: parsedUser.first_name,
+          last_name: parsedUser.last_name,
+          profile_picture: parsedUser.profile_picture,
+        );
+      }
+    }
+  }
+
+  final postFutures = <Future<PostResource>>[];
 
   for (var post in feed.posts) {
     final sym_key =
         await postToSymKey(encryptionKey, post, feed.keys, feed.users);
     if (sym_key != null) {
-      final parsedPost = await parsePost(post, sym_key);
-      parsedPost.user = users[post.user_id];
-      posts.add(parsedPost);
+      postFutures.add(parsePost(post, sym_key));
     }
   }
+  final posts = await Future.wait(postFutures);
 
   return posts;
 }
@@ -120,12 +133,17 @@ Future<Uint8List?> feedDefaultTransform(String encryptionKey, PostResponse post,
 
 class TransformPostFeedPayload {
   String encryptionKey;
-  PostsFeedResponse feed;
+  Map<String, dynamic> feedJson;
 
-  TransformPostFeedPayload(this.encryptionKey, this.feed);
+  TransformPostFeedPayload(this.encryptionKey, this.feedJson);
 }
 
-Future<List<PostResource>?> defaultTransformFunction(
-    TransformPostFeedPayload payload) {
-  return transformPostFeed(payload.encryptionKey, payload.feed);
+Future<FeedResource> defaultTransformFunction(
+    TransformPostFeedPayload payload) async {
+  final feed = PostsFeedResponse.fromJson(payload.feedJson);
+  final posts = await transformPostFeed(payload.encryptionKey, feed);
+  return FeedResource(
+    data: posts ?? [],
+    pageInfo: feed.pageInfo,
+  );
 }
