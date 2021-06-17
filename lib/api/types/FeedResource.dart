@@ -26,6 +26,7 @@ class UserProfile {
 
 class PostResource {
   String id;
+  String user_id;
   String? text_content;
   List<int>? media_content;
   String? media_encoding;
@@ -36,6 +37,7 @@ class PostResource {
 
   PostResource({
     required this.id,
+    required this.user_id,
     this.text_content,
     this.media_content,
     this.media_encoding,

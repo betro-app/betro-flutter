@@ -3,10 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../components/post.dart';
 import '../components/drawer.dart';
 import '../hooks/feed.dart';
 
-const bool _allowAutoLoad = true;
+const bool _allowAutoLoad = false;
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -72,16 +73,8 @@ class HomeScreen extends HookWidget {
               }
             }
             final post = posts[index];
-            final text_content = post.text_content;
-            final media_content = post.media_content;
-            if (media_content != null) {
-              return ListTile(
-                title: Image.memory(Uint8List.fromList(media_content)),
-                subtitle: text_content == null ? null : Text(text_content),
-              );
-            }
-            return ListTile(
-              title: Text(text_content ?? ''),
+            return PostTile(
+              post: post,
             );
           },
         ),

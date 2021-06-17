@@ -63,6 +63,7 @@ Future<PostResource> parsePost(PostResponse post, Uint8List sym_key) async {
       : await symDecryptBuffer(sym_key, post.media_content!);
   return PostResource(
     id: post.id,
+    user_id: post.user_id,
     text_content: text_content == null ? null : utf8.decode(text_content),
     media_content: media_content,
     media_encoding: post.media_encoding,
@@ -109,6 +110,9 @@ Future<List<PostResource>?> transformPostFeed(
     }
   }
   final posts = await Future.wait(postFutures);
+  for (var post in posts) {
+    post.user = users[post.user_id];
+  }
 
   return posts;
 }

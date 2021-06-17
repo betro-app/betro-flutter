@@ -22,6 +22,8 @@ class FeedController {
         .get<Map<String, dynamic>>('/api/feed?limit=$limit&after=$after');
     final data = response.data;
     if (data != null) {
+      // return defaultTransformFunction(
+      //     TransformPostFeedPayload(encryptionKey, data));
       return compute(
         defaultTransformFunction,
         TransformPostFeedPayload(encryptionKey, data),
