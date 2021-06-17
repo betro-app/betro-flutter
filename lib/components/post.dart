@@ -74,31 +74,10 @@ class PostTile extends StatelessWidget {
             frameBuilder: _frameBuilder,
           ),
         ),
-      Container(
-        padding: EdgeInsets.only(
-          bottom: 10,
-          top: 10,
-          left: 10,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            IconButton(
-              onPressed: () {
-                if (post.is_liked) {
-                  ApiController.instance.post.like(post.id);
-                } else {
-                  ApiController.instance.post.unlike(post.id);
-                }
-              },
-              icon: post.is_liked
-                  ? Icon(Icons.favorite)
-                  : Icon(Icons.favorite_outline),
-              color: post.is_liked ? Theme.of(context).primaryColor : null,
-            ),
-            Text(post.likes.toString())
-          ],
-        ),
+      PostLikeButton(
+        id: post.id,
+        likes: post.likes,
+        is_liked: post.is_liked,
       ),
     ];
   }
@@ -141,10 +120,11 @@ class PostLikeButton extends HookWidget {
           IconButton(
             onPressed: () async {
               LikeResponse? likeResponse;
+              print(id);
               if (is_liked.value) {
-                likeResponse = await ApiController.instance.post.like(id);
-              } else {
                 likeResponse = await ApiController.instance.post.unlike(id);
+              } else {
+                likeResponse = await ApiController.instance.post.like(id);
               }
               is_liked.value = likeResponse.liked;
               likes.value = likeResponse.likes ?? 0;
