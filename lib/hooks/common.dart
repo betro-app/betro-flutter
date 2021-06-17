@@ -1,3 +1,6 @@
+import '../api/types/FeedResource.dart';
+import '../api/types/PageInfo.dart';
+
 class LoadingVoidCallback {
   final bool loading;
   final void Function() call;
@@ -10,4 +13,28 @@ class LoadingCallback<T> {
   final Future<Null> Function(T) call;
 
   LoadingCallback(this.loading, this.call);
+}
+
+class LoadingDataCallback<T, V> {
+  final bool loading;
+  final T data;
+  final Future<Null> Function(V) call;
+
+  LoadingDataCallback(this.loading, this.data, this.call);
+}
+
+class HomeFeedCallback {
+  final bool loaded;
+  final bool loading;
+  final List<PostResource>? posts;
+  final PageInfo? pageInfo;
+  final Future<void> Function([bool]) callback;
+
+  HomeFeedCallback({
+    required this.loading,
+    required this.loaded,
+    required this.posts,
+    required this.pageInfo,
+    required this.callback,
+  });
 }

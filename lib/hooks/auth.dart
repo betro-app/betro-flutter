@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
@@ -18,6 +19,33 @@ const TOKEN_SHARED_KEY = 'TOKEN';
 const SYM_KEY_SHARED_KEY = 'SYM_KEY';
 
 final _logger = Logger('hooks/auth');
+
+LoadingDataCallback<bool, void> useIsSecureStorageAvailable(
+    BuildContext context) {
+  var loading = useState<bool>(false);
+  var isAvailable = useState<bool>(false);
+  final checkAvailable = useCallback((void _) async {
+    loading.value = true;
+    try {
+      final storage = FlutterSecureStorage();
+      var random = Random.secure();
+      final keyBytes = List<int>.generate(32, (i) => random.nextInt(256));
+      final key = base64Encode(keyBytes);
+      final valueBytes = List<int>.generate(32, (i) => random.nextInt(256));
+      final value = base64Encode(valueBytes);
+      await storage.write(key: key, value: value);
+      final read = await storage.read(key: key);
+      isAvailable.value = read == value;
+    } catch (e, s) {
+      _logger.warning(e.toString(), e, s);
+      isAvailable.value = false;
+    } finally {
+      loading.value = false;
+    }
+  }, []);
+  return LoadingDataCallback<bool, void>(
+      loading.value, isAvailable.value, checkAvailable);
+}
 
 LoadingVoidCallback useLoadFromLocal(BuildContext context) {
   var loading = useState<bool>(false);

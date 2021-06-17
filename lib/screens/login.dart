@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -24,6 +25,7 @@ class LoginScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSecureStorageAvailable = useIsSecureStorageAvailable(context);
     final saveToLocal = useSaveToLocal(context);
     final _loading = useState<bool>(false);
     final _auth = useProvider(authProvider);
@@ -36,6 +38,9 @@ class LoginScreen extends HookWidget {
     final _saveCredentialsController = useState<bool>(false);
     final _error = useState<String?>(null);
     final _isMounted = useIsMounted();
+    useEffect(() {
+      isSecureStorageAvailable.call(null);
+    }, []);
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -79,8 +84,11 @@ class LoginScreen extends HookWidget {
               ),
               CheckboxListTile(
                 value: _saveCredentialsController.value,
-                onChanged: (value) =>
-                    _saveCredentialsController.value = value ?? false,
+                onChanged: (isSecureStorageAvailable.loading ||
+                        !isSecureStorageAvailable.data)
+                    ? null
+                    : (value) =>
+                        _saveCredentialsController.value = value ?? false,
                 title: const Text('Save user credentials?'),
               ),
               if (_error.value != null) Text(_error.value!),

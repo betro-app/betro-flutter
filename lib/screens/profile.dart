@@ -23,6 +23,7 @@ class ProfileScreen extends HookWidget {
     return Scaffold(
       drawer: const AppDrawer(),
       appBar: AppBar(
+        leading: BackButton(),
         title: Text('Profile'),
         actions: [
           IconButton(

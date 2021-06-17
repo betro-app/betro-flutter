@@ -6,8 +6,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../components/drawer.dart';
 import '../hooks/feed.dart';
 
+const bool _allowAutoLoad = true;
+
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  Widget _buildLoading() => const Center(
+        child: CircularProgressIndicator(),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -15,37 +21,71 @@ class HomeScreen extends HookWidget {
     useEffect(() {
       fetchHomeFeed.callback();
     }, []);
-    print(fetchHomeFeed.posts);
+    final loaded = fetchHomeFeed.loaded;
+    final pageInfo = fetchHomeFeed.pageInfo;
+    final posts = fetchHomeFeed.posts;
+    final itemCount = (pageInfo == null || posts == null || loaded == false)
+        ? 1
+        : (pageInfo.next ? posts.length + 1 : posts.length);
     return Scaffold(
       appBar: AppBar(
         title: Text('Feed'),
       ),
       drawer: const AppDrawer(),
-      body: !fetchHomeFeed.loaded
-          ? CircularProgressIndicator()
-          : ListView.builder(
-              itemCount: fetchHomeFeed.pageInfo?.total ?? 0,
-              itemBuilder: (context, index) {
-                final posts = fetchHomeFeed.posts;
-                if (posts == null || posts.length <= index) {
-                  return Container(
-                    child: Text('Invalid post'),
-                  );
-                }
-                final post = posts[index];
-                final text_content = post.text_content;
-                final media_content = post.media_content;
-                if (media_content != null) {
-                  return ListTile(
-                    title: Image.memory(Uint8List.fromList(media_content)),
-                    subtitle: text_content == null ? null : Text(text_content),
-                  );
-                }
-                return ListTile(
-                  title: Text(text_content ?? ''),
+      body: RefreshIndicator(
+        onRefresh: () {
+          return fetchHomeFeed.callback(true);
+        },
+        child: ListView.builder(
+          itemCount: itemCount,
+          itemBuilder: (context, index) {
+            final loading = fetchHomeFeed.loading;
+            if (pageInfo == null ||
+                posts == null ||
+                loaded == false ||
+                (index >= posts.length && loading)) {
+              return _buildLoading();
+            }
+            if (pageInfo.total == 0) {
+              return const Center(
+                child: Text('No posts'),
+              );
+            }
+            if (index >= posts.length && pageInfo.next) {
+              if (_allowAutoLoad && !loading) {
+                fetchHomeFeed.callback();
+                return _buildLoading();
+              } else {
+                return Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.symmetric(vertical: 10.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      fetchHomeFeed.callback();
+                    },
+                    child: Text(
+                      'Load More',
+                      style: Theme.of(context).primaryTextTheme.subtitle1,
+                    ),
+                  ),
                 );
-              },
-            ),
+              }
+            }
+            final post = posts[index];
+            final text_content = post.text_content;
+            final media_content = post.media_content;
+            if (media_content != null) {
+              return ListTile(
+                title: Image.memory(Uint8List.fromList(media_content)),
+                subtitle: text_content == null ? null : Text(text_content),
+              );
+            }
+            return ListTile(
+              title: Text(text_content ?? ''),
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -118,6 +118,11 @@ class AppDrawer extends HookWidget {
                   : Image.memory(Uint8List.fromList(profile.profile_picture!)),
             ),
             ListTile(
+              title: Text('Home'),
+              onTap: () =>
+                  Navigator.of(context).popUntil(ModalRoute.withName('/home')),
+            ),
+            ListTile(
               title: Text('Notifications'),
               trailing:
                   count.isLoaded ? Text(count.notifications.toString()) : null,

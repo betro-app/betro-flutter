@@ -8,14 +8,14 @@ class PageInfo {
   bool next;
   int limit;
   int total;
-  String after;
+  String? after;
 
   PageInfo({
     required this.updating,
     required this.next,
     required this.limit,
     required this.total,
-    required this.after,
+    this.after,
   });
   factory PageInfo.fromJson(Map<String, dynamic> json) =>
       _$PageInfoFromJson(json);
