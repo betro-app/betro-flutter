@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -7,7 +5,7 @@ import '../components/post.dart';
 import '../components/drawer.dart';
 import '../hooks/feed.dart';
 
-const bool _allowAutoLoad = false;
+const bool _allowAutoLoad = true;
 
 class HomeScreen extends HookWidget {
   const HomeScreen({Key? key}) : super(key: key);

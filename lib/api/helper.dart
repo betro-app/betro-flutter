@@ -65,7 +65,8 @@ Future<PostResource> parsePost(PostResponse post, Uint8List sym_key) async {
     id: post.id,
     user_id: post.user_id,
     text_content: text_content == null ? null : utf8.decode(text_content),
-    media_content: media_content,
+    media_content:
+        media_content == null ? null : Uint8List.fromList(media_content),
     media_encoding: post.media_encoding,
     likes: post.likes,
     is_liked: post.is_liked,
@@ -90,11 +91,14 @@ Future<List<PostResource>?> transformPostFeed(
     if (user != null) {
       final parsedUser = await userFutures[user_id];
       if (parsedUser != null) {
+        final profile_picture = parsedUser.profile_picture;
         users[user_id] = PostResourceUser(
           username: user.username,
           first_name: parsedUser.first_name,
           last_name: parsedUser.last_name,
-          profile_picture: parsedUser.profile_picture,
+          profile_picture: profile_picture == null
+              ? null
+              : Uint8List.fromList(profile_picture),
         );
       }
     }

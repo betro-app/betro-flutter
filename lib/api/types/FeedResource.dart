@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'PageInfo.dart';
 
 class FeedResource {
@@ -28,7 +30,7 @@ class PostResource {
   String id;
   String user_id;
   String? text_content;
-  List<int>? media_content;
+  Uint8List? media_content;
   String? media_encoding;
   int likes;
   bool is_liked;
@@ -52,7 +54,7 @@ class PostResourceUser {
   String username;
   String? first_name;
   String? last_name;
-  List<int>? profile_picture;
+  Uint8List? profile_picture;
 
   PostResourceUser({
     required this.username,

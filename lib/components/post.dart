@@ -4,6 +4,19 @@ import 'package:flutter/material.dart';
 
 import '../api/types/FeedResource.dart';
 
+ImageFrameBuilder _frameBuilder = (BuildContext context, Widget child,
+    int? frame, bool wasSynchronouslyLoaded) {
+  if (wasSynchronouslyLoaded) {
+    return child;
+  }
+  return AnimatedOpacity(
+    opacity: frame == null ? 0 : 1,
+    duration: const Duration(seconds: 1),
+    curve: Curves.easeOut,
+    child: child,
+  );
+};
+
 class PostTile extends StatelessWidget {
   const PostTile({
     Key? key,
@@ -30,7 +43,10 @@ class PostTile extends StatelessWidget {
     return ListTile(
       leading: profile_picture == null
           ? null
-          : Image.memory(Uint8List.fromList((profile_picture))),
+          : Image.memory(
+              profile_picture,
+              frameBuilder: _frameBuilder,
+            ),
       title: Text(_accountName(user)),
       subtitle: Text(user.username),
     );
@@ -46,10 +62,13 @@ class PostTile extends StatelessWidget {
         ),
       if (media_content != null)
         Align(
-          alignment: Alignment.topLeft,
+          alignment: MediaQuery.of(context).size.width > 600
+              ? Alignment.topLeft
+              : Alignment.center,
           child: Image.memory(
-            Uint8List.fromList(media_content),
+            media_content,
             width: min(MediaQuery.of(context).size.width - 40, 600),
+            frameBuilder: _frameBuilder,
           ),
         ),
     ];
