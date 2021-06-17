@@ -13,5 +13,6 @@ class PostUserResponse extends ProfileGrantRow {
   });
   factory PostUserResponse.fromJson(Map<String, dynamic> json) =>
       _$PostUserResponseFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$PostUserResponseToJson(this);
 }

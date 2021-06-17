@@ -121,8 +121,12 @@ Future<List<PostResource>?> transformPostFeed(
   return posts;
 }
 
-Future<Uint8List?> feedDefaultTransform(String encryptionKey, PostResponse post,
-    Map<String, String> keys, Map<String, PostUserResponse> users) async {
+Future<Uint8List?> feedDefaultTransform(
+  String encryptionKey,
+  PostResponse post,
+  Map<String, String> keys,
+  Map<String, PostUserResponse> users,
+) async {
   final user = users[post.user_id];
   if (user == null) return null;
   final own_private_key = user.own_private_key;
@@ -146,10 +150,11 @@ class TransformPostFeedPayload {
   TransformPostFeedPayload(this.encryptionKey, this.feedJson);
 }
 
-Future<FeedResource> defaultTransformFunction(
-    TransformPostFeedPayload payload) async {
+Future<FeedResource> defaultTransformFunction(TransformPostFeedPayload payload,
+    [PostToSymKeyFunction postToSymKey = feedDefaultTransform]) async {
   final feed = PostsFeedResponse.fromJson(payload.feedJson);
-  final posts = await transformPostFeed(payload.encryptionKey, feed);
+  final posts =
+      await transformPostFeed(payload.encryptionKey, feed, postToSymKey);
   return FeedResource(
     data: posts ?? [],
     pageInfo: feed.pageInfo,

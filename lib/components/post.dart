@@ -1,8 +1,10 @@
-import 'dart:typed_data';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../api/types/FeedResource.dart';
+import '../api/types/LikeResponse.dart';
+import '../api/api.dart';
 
 ImageFrameBuilder _frameBuilder = (BuildContext context, Widget child,
     int? frame, bool wasSynchronouslyLoaded) {
@@ -61,7 +63,8 @@ class PostTile extends StatelessWidget {
           title: Text(text_content),
         ),
       if (media_content != null)
-        Align(
+        Container(
+          padding: EdgeInsets.only(top: 10),
           alignment: MediaQuery.of(context).size.width > 600
               ? Alignment.topLeft
               : Alignment.center,
@@ -71,6 +74,32 @@ class PostTile extends StatelessWidget {
             frameBuilder: _frameBuilder,
           ),
         ),
+      Container(
+        padding: EdgeInsets.only(
+          bottom: 10,
+          top: 10,
+          left: 10,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              onPressed: () {
+                if (post.is_liked) {
+                  ApiController.instance.post.like(post.id);
+                } else {
+                  ApiController.instance.post.unlike(post.id);
+                }
+              },
+              icon: post.is_liked
+                  ? Icon(Icons.favorite)
+                  : Icon(Icons.favorite_outline),
+              color: post.is_liked ? Theme.of(context).primaryColor : null,
+            ),
+            Text(post.likes.toString())
+          ],
+        ),
+      ),
     ];
   }
 
@@ -82,6 +111,50 @@ class PostTile extends StatelessWidget {
         children: [
           _buildUserInfo(),
           ..._buildPost(context),
+        ],
+      ),
+    );
+  }
+}
+
+class PostLikeButton extends HookWidget {
+  const PostLikeButton(
+      {Key? key, required this.id, required this.is_liked, required this.likes})
+      : super(key: key);
+
+  final String id;
+  final bool is_liked;
+  final int likes;
+  @override
+  Widget build(BuildContext context) {
+    final is_liked = useState<bool>(this.is_liked);
+    final likes = useState<int>(this.likes);
+    return Container(
+      padding: EdgeInsets.only(
+        bottom: 10,
+        top: 10,
+        left: 10,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          IconButton(
+            onPressed: () async {
+              LikeResponse? likeResponse;
+              if (is_liked.value) {
+                likeResponse = await ApiController.instance.post.like(id);
+              } else {
+                likeResponse = await ApiController.instance.post.unlike(id);
+              }
+              is_liked.value = likeResponse.liked;
+              likes.value = likeResponse.likes ?? 0;
+            },
+            icon: is_liked.value
+                ? Icon(Icons.favorite)
+                : Icon(Icons.favorite_outline),
+            color: is_liked.value ? Theme.of(context).primaryColor : null,
+          ),
+          Text(likes.value.toString())
         ],
       ),
     );

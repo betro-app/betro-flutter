@@ -3,6 +3,7 @@ import 'auth.dart';
 import 'account.dart';
 import 'feed.dart';
 import 'keys.dart';
+import 'post.dart';
 
 class ApiController {
   static ApiController instance = ApiController(DEFAULT_HOST);
@@ -19,4 +20,5 @@ class ApiController {
   AccountController get account => AccountController(auth);
   FeedController get feed => FeedController(auth);
   KeysController get keys => KeysController(auth);
+  PostController get post => PostController(auth);
 }
