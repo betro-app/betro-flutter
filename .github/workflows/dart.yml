@@ -17,10 +17,13 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: macos-latest
+            flutter_path: /Users/runner/hostedtoolcache/flutter
             TARGET: macos
           - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
             TARGET: linux
           - os: windows-latest
+            flutter_path: C:\hostedtoolcache\windows\flutter
             TARGET: windows
 
     steps:
@@ -29,6 +32,12 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: "15.x"
+
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ matrix.flutter_path }}
+          key: ${{ matrix.os }}-{{matrix.channel}}-flutter
 
       - name: Install Flutter
         uses: subosito/flutter-action@v1
@@ -86,4 +95,4 @@ jobs:
           path: |
             build/macos/Build/Products/Release/
             build/linux/x64/release/bundle/
-            build/linux/x64/release/
+            build/windows/x64/Release/
