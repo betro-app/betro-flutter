@@ -48,6 +48,9 @@ jobs:
           flutter config --enable-macos-desktop
           flutter config --enable-windows-desktop
 
+      - name: Configure project for desktop
+        run: flutter create --project-name=betro --platforms=windows,macos,linux .
+
       - name: Doctor
         # Run doctor, for ease of debugging any issues.
         run: flutter doctor -v
@@ -75,3 +78,7 @@ jobs:
           flutter build -v ${{matrix.TARGET}} --release
 
       - uses: codecov/codecov-action@v1
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ./
