@@ -95,4 +95,4 @@ jobs:
           path: |
             build/macos/Build/Products/Release/
             build/linux/x64/release/bundle/
-            build/windows/x64/Release/
+            build/windows/runner/Release
