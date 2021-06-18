@@ -11,6 +11,7 @@ import '../screens/loading.dart';
 import '../screens/home.dart';
 import '../screens/profile.dart';
 import '../screens/register.dart';
+import '../screens/user.dart';
 
 final _logger = Logger('main');
 
@@ -43,6 +44,11 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/register': (context) => RegisterScreen(),
         '/profile': (context) => ProfileScreen(),
+        '/user': (context) {
+          final args =
+              ModalRoute.of(context)!.settings.arguments as UserScreenProps;
+          return UserScreen(props: args);
+        },
       },
       // onGenerateRoute: AppRouter.router.generator,
     );

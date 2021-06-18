@@ -18,7 +18,7 @@ class HomeScreen extends HookWidget {
   Widget build(BuildContext context) {
     final fetchHomeFeed = useFetchHomeFeed();
     useEffect(() {
-      fetchHomeFeed.callback();
+      fetchHomeFeed.call();
     }, []);
     final loaded = fetchHomeFeed.loaded;
     final pageInfo = fetchHomeFeed.pageInfo;
@@ -33,7 +33,7 @@ class HomeScreen extends HookWidget {
       drawer: const AppDrawer(),
       body: RefreshIndicator(
         onRefresh: () {
-          return fetchHomeFeed.callback(true);
+          return fetchHomeFeed.call(true);
         },
         child: ListView.builder(
           itemCount: itemCount,
@@ -52,7 +52,7 @@ class HomeScreen extends HookWidget {
             }
             if (index >= posts.length && pageInfo.next) {
               if (_allowAutoLoad && !loading) {
-                fetchHomeFeed.callback();
+                fetchHomeFeed.call();
                 return _buildLoading();
               } else {
                 return Container(
@@ -60,7 +60,7 @@ class HomeScreen extends HookWidget {
                   margin: EdgeInsets.symmetric(vertical: 10.0),
                   child: GestureDetector(
                     onTap: () {
-                      fetchHomeFeed.callback();
+                      fetchHomeFeed.call();
                     },
                     child: Text(
                       'Load More',

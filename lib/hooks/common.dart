@@ -28,13 +28,29 @@ class HomeFeedCallback {
   final bool loading;
   final List<PostResource>? posts;
   final PageInfo? pageInfo;
-  final Future<void> Function([bool]) callback;
+  final Future<void> Function([bool]) call;
 
   HomeFeedCallback({
     required this.loading,
     required this.loaded,
     required this.posts,
     required this.pageInfo,
-    required this.callback,
+    required this.call,
+  });
+}
+
+class UserFeedCallback {
+  final bool loaded;
+  final bool loading;
+  final List<PostResource>? posts;
+  final PageInfo? pageInfo;
+  final Future<void> Function(String, [bool]) call;
+
+  UserFeedCallback({
+    required this.loading,
+    required this.loaded,
+    required this.posts,
+    required this.pageInfo,
+    required this.call,
   });
 }

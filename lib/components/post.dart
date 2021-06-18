@@ -4,6 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../api/types/FeedResource.dart';
 import '../api/types/LikeResponse.dart';
+import '../api/types/UserInfo.dart';
+import '../screens/user.dart';
 import '../api/api.dart';
 
 ImageFrameBuilder _frameBuilder = (BuildContext context, Widget child,
@@ -36,13 +38,30 @@ class PostTile extends StatelessWidget {
     return _name;
   }
 
-  Widget _buildUserInfo() {
+  Widget _buildUserInfo(BuildContext context) {
     final user = post.user;
     if (user == null) {
       return Container();
     }
     final profile_picture = user.profile_picture;
     return ListTile(
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          '/user',
+          arguments: UserScreenProps(
+            username: user.username,
+            initialData: UserInfo(
+              id: post.user_id,
+              is_approved: true,
+              is_following: true,
+              username: user.username,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              profile_picture: user.profile_picture,
+            ),
+          ),
+        );
+      },
       leading: profile_picture == null
           ? null
           : Image.memory(
@@ -88,7 +107,7 @@ class PostTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildUserInfo(),
+          _buildUserInfo(context),
           ..._buildPost(context),
         ],
       ),
@@ -108,6 +127,7 @@ class PostLikeButton extends HookWidget {
   Widget build(BuildContext context) {
     final is_liked = useState<bool>(this.is_liked);
     final likes = useState<int>(this.likes);
+    final loading = useState<bool>(false);
     return Container(
       padding: EdgeInsets.only(
         bottom: 10,
@@ -118,17 +138,21 @@ class PostLikeButton extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           IconButton(
-            onPressed: () async {
-              LikeResponse? likeResponse;
-              print(id);
-              if (is_liked.value) {
-                likeResponse = await ApiController.instance.post.unlike(id);
-              } else {
-                likeResponse = await ApiController.instance.post.like(id);
-              }
-              is_liked.value = likeResponse.liked;
-              likes.value = likeResponse.likes ?? 0;
-            },
+            onPressed: loading.value == true
+                ? null
+                : () async {
+                    loading.value = true;
+                    LikeResponse? likeResponse;
+                    if (is_liked.value) {
+                      likeResponse =
+                          await ApiController.instance.post.unlike(id);
+                    } else {
+                      likeResponse = await ApiController.instance.post.like(id);
+                    }
+                    is_liked.value = likeResponse.liked;
+                    likes.value = likeResponse.likes ?? 0;
+                    loading.value = false;
+                  },
             icon: is_liked.value
                 ? Icon(Icons.favorite)
                 : Icon(Icons.favorite_outline),
