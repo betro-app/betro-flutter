@@ -82,10 +82,20 @@ jobs:
       - name: Run tests
         run: flutter test --coverage
 
+      - name: Build apk using debug key
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+          echo "storeFile=$(pwd)/debug.keystore" >> android/key.properties
+          echo "keyAlias=androiddebugkey" >> android/key.properties
+          echo "keyPassword=android" >> android/key.properties
+          echo "storePassword=android" >> android/key.properties
+          flutter build apk --release
+
       - name: Build desktop
         run: |
           flutter packages get	
-          flutter build -v ${{matrix.TARGET}} --release
+          flutter build ${{matrix.TARGET}} --release
 
       - uses: codecov/codecov-action@v1
 
@@ -95,4 +105,10 @@ jobs:
           path: |
             build/macos/Build/Products/Release/
             build/linux/x64/release/bundle/
-            build/windows/runner/Release
+            build/windows/runner/Release/
+
+      - uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'ubuntu')
+        with:
+          name: Release apk on ${{ matrix.channel }}
+          path: build/app/outputs/flutter-apk/
