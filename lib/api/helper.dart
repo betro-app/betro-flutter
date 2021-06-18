@@ -12,7 +12,7 @@ import './types/PostsFeedResponse.dart';
 
 final _logger = Logger('api/helper');
 
-typedef Future<Uint8List?> PostToSymKeyFunction(
+typedef PostToSymKeyFunction = Future<Uint8List?> Function(
     String encryptionKey,
     PostResponse post,
     Map<String, String> keys,

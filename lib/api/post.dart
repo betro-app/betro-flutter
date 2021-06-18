@@ -68,14 +68,14 @@ class PostController {
     final encryptionKey = auth.encryptionKey;
     if (encryptionKey == null) return null;
     final sym_key = await symDecrypt(encryptionKey, encrypted_sym_key);
-    String? encryptedText = null;
+    String? encryptedText;
     if (text != null) {
       encryptedText = await symEncrypt(
         base64Encode(sym_key),
         utf8.encode(text),
       );
     }
-    String? encryptedMedia = null;
+    String? encryptedMedia;
     if (media != null) {
       encryptedMedia = await symEncrypt(
         base64Encode(sym_key),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../hooks/common.dart';
-import '../api/types/FeedResource.dart';
-import '../api/types/PageInfo.dart';
 import './post.dart';
 
 class PostsFeed extends StatelessWidget {

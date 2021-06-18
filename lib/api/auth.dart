@@ -108,7 +108,8 @@ class AuthController {
       final response = await client
           .get('/api/register/available/username?username=$username');
       return response.data['available'] == true;
-    } on DioError catch (e) {
+    } on DioError catch (e, s) {
+      _logger.warning(e.toString(), e, s);
       return false;
     }
   }
@@ -118,7 +119,8 @@ class AuthController {
       final response =
           await client.get('/api/register/available/email?email=$email');
       return response.data['available'] == true;
-    } on DioError catch (e) {
+    } on DioError catch (e, s) {
+      _logger.warning(e.toString(), e, s);
       return false;
     }
   }

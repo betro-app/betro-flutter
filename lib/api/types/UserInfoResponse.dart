@@ -18,5 +18,6 @@ class UserInfoResponse extends ProfileGrantRow {
   });
   factory UserInfoResponse.fromJson(Map<String, dynamic> json) =>
       _$UserInfoResponseFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$UserInfoResponseToJson(this);
 }
