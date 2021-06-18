@@ -3,13 +3,10 @@ import 'dart:typed_data';
 
 import 'package:betro_dart_lib/sym.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logging/logging.dart';
 
 import './auth.dart';
 import './helper.dart';
 import './types/FeedResource.dart';
-
-final _logger = Logger('api/feed');
 
 class FeedController {
   final AuthController auth;
