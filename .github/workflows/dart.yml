@@ -90,12 +90,12 @@ jobs:
           echo "keyAlias=androiddebugkey" >> android/key.properties
           echo "keyPassword=android" >> android/key.properties
           echo "storePassword=android" >> android/key.properties
-          flutter build apk --release
+          flutter build -v apk --release
 
       - name: Build desktop
         run: |
           flutter packages get	
-          flutter build ${{matrix.TARGET}} --release
+          flutter build -v ${{matrix.TARGET}} --release
 
       - uses: codecov/codecov-action@v1
 
@@ -111,4 +111,4 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         with:
           name: Release apk on ${{ matrix.channel }}
-          path: build/app/outputs/flutter-apk/
+          path: build/app/outputs/flutter-apk/app-release.apk
