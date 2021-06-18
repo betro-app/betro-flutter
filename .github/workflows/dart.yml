@@ -41,7 +41,7 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev liblzma-dev libjsoncpp-dev libjsoncpp0 clang
+          sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev liblzma-dev libjsoncpp-dev clang
       - name: Enable desktop support
         run: |
           flutter config --enable-linux-desktop
