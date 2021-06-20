@@ -6,12 +6,17 @@ import 'package:logging_appenders/logging_appenders.dart';
 
 // import './router.dart';
 
+import '../screens/groups.dart';
+import '../screens/newgroup.dart';
 import '../screens/login.dart';
 import '../screens/loading.dart';
 import '../screens/home.dart';
 import '../screens/profile.dart';
 import '../screens/register.dart';
 import '../screens/user.dart';
+import '../screens/approvals.dart';
+import '../screens/followers.dart';
+import '../screens/followees.dart';
 
 final _logger = Logger('main');
 
@@ -49,6 +54,11 @@ class MyApp extends StatelessWidget {
               ModalRoute.of(context)!.settings.arguments as UserScreenProps;
           return UserScreen(props: args);
         },
+        '/groups': (context) => GroupScreen(),
+        '/newgroup': (context) => NewGroupScreen(),
+        '/followers': (context) => FollowersScreen(),
+        '/followees': (context) => FolloweesScreen(),
+        '/approvals': (context) => ApprovalsScreen(),
       },
       // onGenerateRoute: AppRouter.router.generator,
     );

@@ -47,7 +47,9 @@ Future<UserProfile> parseUserGrant(
       first_name_bytes == null ? null : utf8.decode(first_name_bytes);
   response.last_name =
       last_name_bytes == null ? null : utf8.decode(last_name_bytes);
-  response.profile_picture = profile_picture_bytes;
+  response.profile_picture = profile_picture_bytes == null
+      ? null
+      : Uint8List.fromList(profile_picture_bytes);
   return response;
 }
 

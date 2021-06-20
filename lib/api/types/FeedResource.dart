@@ -15,7 +15,7 @@ class FeedResource {
 class UserProfile {
   String? first_name;
   String? last_name;
-  List<int>? profile_picture;
+  Uint8List? profile_picture;
   String? own_private_key;
 
   UserProfile({

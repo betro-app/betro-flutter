@@ -124,40 +124,47 @@ class AppDrawer extends HookWidget {
               title: Text('Notifications'),
               trailing:
                   count.isLoaded ? Text(count.notifications.toString()) : null,
+              onTap: () => Navigator.of(context).pushNamed('/notifications'),
             ),
             ListTile(
               title: Text('Approvals'),
               trailing:
                   count.isLoaded ? Text(count.approvals.toString()) : null,
+              onTap: () => Navigator.of(context).pushNamed('/approvals'),
             ),
             AppDrawerBadgeListTile(
               showBadge:
                   count.isLoaded && count.groups != null && count.groups == 0,
-              trailing:
-                  count.isLoaded ? Text(count.approvals.toString()) : null,
+              trailing: count.isLoaded ? Text(count.groups.toString()) : null,
+              onTap: () => Navigator.of(context).pushNamed('/groups'),
               child: const Text('Groups'),
             ),
             ListTile(
               title: Text('Followers'),
               trailing:
                   count.isLoaded ? Text(count.followers.toString()) : null,
+              onTap: () => Navigator.of(context).pushNamed('/followers'),
             ),
             ListTile(
               title: Text('Followees'),
               trailing:
                   count.isLoaded ? Text(count.followees.toString()) : null,
+              onTap: () => Navigator.of(context).pushNamed('/followees'),
             ),
             Divider(),
             ListTile(
               title: Text('Post'),
+              onTap: () => Navigator.of(context).pushNamed('/post'),
             ),
             ListTile(
               title: Text('My Posts'),
               trailing: count.isLoaded ? Text(count.posts.toString()) : null,
+              onTap: () => Navigator.of(context).pushNamed('/posts'),
             ),
             Divider(),
             ListTile(
               title: Text('Search'),
+              onTap: () => Navigator.of(context).pushNamed('/search'),
             ),
             Divider(),
             AppDrawerBadgeListTile(
@@ -172,6 +179,7 @@ class AppDrawer extends HookWidget {
               showBadge: count.isLoaded &&
                   count.settings != null &&
                   count.settings == 0,
+              onTap: () => Navigator.of(context).pushNamed('/settings'),
               child: const Text('Settings'),
             ),
             ListTile(

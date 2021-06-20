@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../api/api.dart';
 import '../components/post.dart';
 import '../components/drawer.dart';
 import '../hooks/feed.dart';
@@ -16,8 +17,9 @@ class HomeScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fetchHomeFeed = useFetchHomeFeed();
+    final fetchHomeFeed = useFetchHomeFeed(null);
     useEffect(() {
+      ApiController.instance.keys.fetchKeys();
       fetchHomeFeed.call();
     }, []);
     final loaded = fetchHomeFeed.loaded;

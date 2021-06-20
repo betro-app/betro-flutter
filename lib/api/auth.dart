@@ -11,6 +11,7 @@ import 'package:betro_dart_lib/betro_dart_lib.dart';
 import './types/LoginRequest.dart';
 import './types/RegisterRequest.dart';
 import './types/TokenResponse.dart';
+import './types/EcdhKeyResource.dart';
 
 final _logger = Logger('api/auth');
 
@@ -44,6 +45,7 @@ class AuthController {
   final Dio client;
   String? encryptionKey;
   Uint8List? symKey;
+  Map<String, EcdhKeyResource> ecdhKeys = {};
   AuthController(this.host) : client = Dio(BaseOptions(baseUrl: host)) {
     client.options.headers['accept-encoding'] = 'gzip, deflate, br';
     client.options.headers['charset'] = 'UTF-8';
@@ -100,6 +102,7 @@ class AuthController {
     // await client.post('/api/logout');
     symKey = null;
     encryptionKey = null;
+    ecdhKeys = {};
     client.options.headers['authorization'] = null;
   }
 

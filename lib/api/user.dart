@@ -1,9 +1,12 @@
-import 'dart:typed_data';
+import 'dart:convert';
 
 import './auth.dart';
 import './helper.dart';
 import './types/UserInfo.dart';
 import './types/UserInfoResponse.dart';
+import './types/UserEcdhKeyResponse.dart';
+import './types/SearchUserResource.dart';
+import './types/SearchUserResponse.dart';
 
 class UserController {
   final AuthController auth;
@@ -17,7 +20,6 @@ class UserController {
     if (data == null) return null;
     final user = UserInfoResponse.fromJson(data);
     final parsedUser = await parseUserGrant(encryptionKey, user);
-    final profile_picture = parsedUser.profile_picture;
     return UserInfo(
       id: user.id,
       is_following: user.is_following,
@@ -26,8 +28,42 @@ class UserController {
       public_key: user.public_key,
       first_name: parsedUser.first_name,
       last_name: parsedUser.last_name,
-      profile_picture:
-          profile_picture == null ? null : Uint8List.fromList(profile_picture),
+      profile_picture: parsedUser.profile_picture,
     );
+  }
+
+  Future<List<SearchUserResource>?> fetchSearchUser(String query,
+      [String? after]) async {
+    final encryptionKey = auth.encryptionKey;
+    if (encryptionKey == null) return null;
+    const limit = 20;
+    after ??= base64Encode(utf8.encode(DateTime.now().toIso8601String()));
+    final response = await auth.http1Client
+        .get('/api/follow/search??query=$query&limit=$limit&after=$after');
+    final resp = (response.data as List<dynamic>)
+        .map((a) => SearchUserResponse.fromJson(a))
+        .toList();
+    final list = <SearchUserResource>[];
+    for (var item in resp) {
+      final user = await parseUserGrant(encryptionKey, item);
+      list.add(
+        SearchUserResource(
+          id: item.id,
+          username: item.username,
+          is_following: item.is_following,
+          is_following_approved: item.is_following_approved,
+          public_key: item.public_key,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          profile_picture: user.profile_picture,
+        ),
+      );
+    }
+    return list;
+  }
+
+  Future<UserEcdhKeyResponse> fetchUserEcdhKey(String id) async {
+    final response = await auth.http1Client.get('/api/keys/ecdh/user/$id');
+    return UserEcdhKeyResponse.fromJson(response.data);
   }
 }

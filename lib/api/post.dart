@@ -26,13 +26,11 @@ class PostController {
     }
     final resp = GetPostResponse.fromJson(data);
     final parsedUser = await parseUserGrant(encryptionKey, resp.user);
-    final profile_picture = parsedUser.profile_picture;
     final user = PostResourceUser(
       username: resp.user.username,
       first_name: parsedUser.first_name,
       last_name: parsedUser.last_name,
-      profile_picture:
-          profile_picture == null ? null : Uint8List.fromList(profile_picture),
+      profile_picture: parsedUser.profile_picture,
     );
     final own_private_key = resp.user.own_private_key;
     final public_key = resp.user.public_key;
