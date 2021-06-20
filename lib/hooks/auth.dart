@@ -24,7 +24,7 @@ LoadingDataCallback<bool, void> useIsSecureStorageAvailable(
     BuildContext context) {
   var loading = useState<bool>(false);
   var isAvailable = useState<bool>(false);
-  final checkAvailable = useCallback((void _) async {
+  final checkAvailable = useCallback(([void _]) async {
     loading.value = true;
     try {
       final storage = FlutterSecureStorage();

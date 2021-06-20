@@ -38,7 +38,7 @@ class LoginScreen extends HookWidget {
     final _error = useState<String?>(null);
     final _isMounted = useIsMounted();
     useEffect(() {
-      isSecureStorageAvailable.call(null);
+      isSecureStorageAvailable.call();
     }, []);
     return SafeArea(
       child: Scaffold(

@@ -4,16 +4,19 @@ import '../hooks/common.dart';
 import './post.dart';
 
 class PostsFeed extends StatelessWidget {
-  const PostsFeed({
+  PostsFeed({
     Key? key,
     required this.hook,
     this.shrinkWrap = false,
     this.loadOnScroll = false,
-  }) : super(key: key);
+    ScrollController? controller,
+  })  : _controller = controller ?? ScrollController(),
+        super(key: key);
 
   final HomeFeedCallback hook;
   final bool shrinkWrap;
   final bool loadOnScroll;
+  final ScrollController _controller;
 
   Widget _buildLoading() => const Center(
         child: CircularProgressIndicator(),
@@ -28,6 +31,7 @@ class PostsFeed extends StatelessWidget {
         ? 1
         : (pageInfo.next ? posts.length + 1 : posts.length);
     return ListView.builder(
+      controller: _controller,
       shrinkWrap: shrinkWrap,
       itemCount: itemCount,
       itemBuilder: (context, index) {

@@ -18,6 +18,7 @@ class UserScreen extends HookWidget {
   UserScreen({Key? key, required this.props}) : super(key: key);
 
   final UserScreenProps props;
+  final ScrollController _controller = ScrollController();
 
   String _accountName(UserInfo user) {
     var _name = '';
@@ -58,7 +59,7 @@ class UserScreen extends HookWidget {
     final fetchUser = useFetchUser(props.username, props.initialData);
     final fetchUserFeed = useFetchUserFeed(props.username);
     useEffect(() {
-      fetchUser.call(null);
+      fetchUser.call();
       fetchUserFeed.call();
     }, []);
     return Scaffold(
@@ -70,21 +71,20 @@ class UserScreen extends HookWidget {
       body: RefreshIndicator(
         onRefresh: () async {
           return Future.wait([
-            fetchUser.call(null),
+            fetchUser.call(),
             fetchUserFeed.call(),
           ]).then((value) => null);
         },
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildUserInfo(fetchUser.data),
-              PostsFeed(
-                hook: fetchUserFeed,
-                shrinkWrap: true,
-              ),
-            ],
-          ),
+        child: ListView(
+          controller: _controller,
+          children: [
+            _buildUserInfo(fetchUser.data),
+            PostsFeed(
+              hook: fetchUserFeed,
+              shrinkWrap: true,
+              controller: _controller,
+            ),
+          ],
         ),
       ),
       // body: ,

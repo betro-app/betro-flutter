@@ -18,7 +18,7 @@ class LoadingCallback<T> {
 class LoadingDataCallback<T, V> {
   final bool loading;
   final T data;
-  final Future<Null> Function(V) call;
+  final Future<Null> Function([V]) call;
 
   LoadingDataCallback(this.loading, this.data, this.call);
 }

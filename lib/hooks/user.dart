@@ -8,7 +8,7 @@ LoadingDataCallback<UserInfo?, void> useFetchUser(String username,
     [UserInfo? initialData]) {
   final loading = useState<bool>(false);
   final data = useState<UserInfo?>(initialData);
-  final fetchProfile = useCallback((void _) async {
+  final fetchProfile = useCallback(([void _]) async {
     loading.value = true;
     final userInfo = await ApiController.instance.user.fetchUserInfo(username);
     data.value = userInfo;
