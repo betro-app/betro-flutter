@@ -60,7 +60,8 @@ class AppDrawer extends HookWidget {
   Future<void> _logout(BuildContext context) async {
     await ApiController.instance.auth.logout();
     context.read(authProvider.notifier).loggedOut();
-    await Navigator.pushReplacementNamed(context, '/login');
+    await Navigator.of(context)
+        .pushNamedAndRemoveUntil('/login', (route) => false);
   }
 
   String _accountName(ProfileState profile) {

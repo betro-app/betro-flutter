@@ -64,6 +64,7 @@ class UserScreen extends HookWidget {
     return Scaffold(
       drawer: const AppDrawer(),
       appBar: AppBar(
+        leading: BackButton(),
         title: Text(fetchUser.data?.username ?? props.username),
       ),
       body: RefreshIndicator(
@@ -75,6 +76,7 @@ class UserScreen extends HookWidget {
         },
         child: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               _buildUserInfo(fetchUser.data),
               PostsFeed(
