@@ -15,6 +15,9 @@ class ApprovalsScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final fetchApprovals = useFetchPendingApprovals();
+    useEffect(() {
+      fetchApprovals.call();
+    }, []);
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(),

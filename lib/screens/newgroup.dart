@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../providers/groups.dart';
 import '../api/api.dart';
 import '../components/textfielddialog.dart';
 
@@ -21,11 +23,15 @@ class NewGroupScreen extends HookWidget {
                 ? null
                 : () async {
                     _loading.value = true;
-                    await ApiController.instance.group.createGroup(
+                    final group =
+                        await ApiController.instance.group.createGroup(
                       _name.value,
                       _default.value,
                     );
                     _loading.value = false;
+                    if (group != null) {
+                      context.read(groupsProvider.notifier).addGroup(group);
+                    }
                     Navigator.of(context).pop();
                   },
             icon: Icon(Icons.save),

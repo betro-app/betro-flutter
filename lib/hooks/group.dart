@@ -1,5 +1,8 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../providers/groups.dart';
 import '../api/api.dart';
 import '../api/types/GroupResponse.dart';
 import 'common.dart';
@@ -31,6 +34,16 @@ LoadingListDataCallback<T> Function() _fetchListHookCreator<T>(
   return useFetchList;
 }
 
-final useFetchGroups = _fetchListHookCreator<GroupResponse>(
-  () => ApiController.instance.group.fetchGroups(),
-);
+LoadingVoidCallback useFetchGroups(BuildContext context) {
+  final loading = useState<bool>(false);
+  final getResponse = useCallback(() async {
+    loading.value = true;
+    final resp = await ApiController.instance.group.fetchGroups();
+    context.read(groupsProvider.notifier).groupsLoaded(resp);
+    loading.value = false;
+  }, []);
+  return LoadingVoidCallback(
+    loading.value,
+    getResponse,
+  );
+}

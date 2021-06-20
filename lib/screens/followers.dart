@@ -15,6 +15,9 @@ class FollowersScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final fetchFollowers = useFetchFollowers();
+    useEffect(() {
+      fetchFollowers.call();
+    }, []);
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(),

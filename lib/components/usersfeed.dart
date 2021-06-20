@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../api/api.dart';
 import '../hooks/common.dart';
 import '../api/types/UserInfo.dart';
 import '../screens/user.dart';
@@ -21,10 +20,6 @@ class UsersListFeed<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      ApiController.instance.keys.fetchKeys();
-      hook.call();
-    }, []);
     final loaded = hook.loaded;
     final paginatedData = hook.response;
     final itemCount = (paginatedData == null || loaded == false)
@@ -104,6 +99,14 @@ class _UserListTile<T> extends HookWidget {
             ),
       title: Text(_accountName),
       subtitle: Text(user.username),
+      trailing: user.is_approved
+          ? Text('Already following')
+          : user.is_following
+              ? Text('Follow request sent')
+              : ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Follow'),
+                ),
       onTap: () {
         Navigator.of(context).pushNamed(
           '/user',
