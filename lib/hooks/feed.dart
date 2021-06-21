@@ -49,5 +49,11 @@ final useFetchHomeFeed = _feedHookCreator<void>(
   (void _, [after]) => ApiController.instance.feed.fetchHomeFeed(after),
 );
 
-final useFetchUserFeed = _feedHookCreator<String>((String username, [after]) =>
-    ApiController.instance.feed.fetchUserPosts(username));
+final useFetchUserFeed = _feedHookCreator<String>(
+  (String username, [after]) =>
+      ApiController.instance.feed.fetchUserPosts(username, after),
+);
+
+final useFetchOwnFeed = _feedHookCreator<void>(
+  (void _, [after]) => ApiController.instance.feed.fetchOwnPosts(after),
+);

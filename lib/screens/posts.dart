@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../api/api.dart';
 import '../components/feed.dart';
 import '../components/drawer.dart';
 import '../hooks/feed.dart';
 
-class HomeScreen extends HookWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class PostsScreen extends HookWidget {
+  const PostsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final fetchHomeFeed = useFetchHomeFeed(null);
+    final fetchOwnFeed = useFetchOwnFeed(null);
     useEffect(() {
-      ApiController.instance.keys.fetchKeys();
-      fetchHomeFeed.call();
+      fetchOwnFeed.call();
     }, []);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feed'),
+        leading: BackButton(),
+        title: Text('Own Posts'),
       ),
       drawer: const AppDrawer(),
       body: RefreshIndicator(
         onRefresh: () {
-          return fetchHomeFeed.call(true);
+          return fetchOwnFeed.call(true);
         },
         child: PostsFeed(
-          hook: fetchHomeFeed,
+          hook: fetchOwnFeed,
           loadOnScroll: true,
         ),
       ),

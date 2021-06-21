@@ -17,6 +17,8 @@ import '../screens/user.dart';
 import '../screens/approvals.dart';
 import '../screens/followers.dart';
 import '../screens/followees.dart';
+import '../screens/posts.dart';
+import '../screens/newpost.dart';
 
 final _logger = Logger('main');
 
@@ -59,6 +61,8 @@ class MyApp extends StatelessWidget {
         '/followers': (context) => FollowersScreen(),
         '/followees': (context) => FolloweesScreen(),
         '/approvals': (context) => ApprovalsScreen(),
+        '/posts': (context) => PostsScreen(),
+        '/post': (context) => NewPostScreen(),
       },
       // onGenerateRoute: AppRouter.router.generator,
     );

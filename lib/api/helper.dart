@@ -67,8 +67,8 @@ Future<PostResource> parsePost(PostResponse post, Uint8List sym_key) async {
     media_content:
         media_content == null ? null : Uint8List.fromList(media_content),
     media_encoding: post.media_encoding,
-    likes: post.likes,
-    is_liked: post.is_liked,
+    likes: post.likes ?? 0,
+    is_liked: post.is_liked ?? false,
     created_at: post.created_at,
   );
 }

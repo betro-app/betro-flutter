@@ -86,6 +86,6 @@ class PostController {
       media_content: encryptedMedia,
     );
     final response = await auth.client.post('/api/post', data: jsonEncode(req));
-    return response.data;
+    return PostResponse.fromJson(response.data);
   }
 }

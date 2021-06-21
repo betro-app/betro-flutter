@@ -10,8 +10,8 @@ class PostResponse {
   String? media_encoding;
   String? text_content;
   String key_id;
-  int likes;
-  bool is_liked;
+  int? likes;
+  bool? is_liked;
   DateTime created_at;
 
   PostResponse({
@@ -21,8 +21,8 @@ class PostResponse {
     this.media_encoding,
     this.text_content,
     required this.key_id,
-    required this.likes,
-    required this.is_liked,
+    this.likes,
+    this.is_liked,
     required this.created_at,
   });
   factory PostResponse.fromJson(Map<String, dynamic> json) =>

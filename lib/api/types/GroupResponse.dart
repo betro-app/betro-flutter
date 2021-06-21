@@ -18,4 +18,14 @@ class GroupResponse {
   factory GroupResponse.fromJson(Map<String, dynamic> json) =>
       _$GroupResponseFromJson(json);
   Map<String, dynamic> toJson() => _$GroupResponseToJson(this);
+
+  @override
+  String toString() => name;
+
+  @override
+  bool operator ==(o) => o is GroupResponse && o.id == id;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ name.hashCode ^ sym_key.hashCode & is_default.hashCode;
 }

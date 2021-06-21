@@ -4,14 +4,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../providers/groups.dart';
 import '../api/api.dart';
-import '../components/textfielddialog.dart';
 
 class NewGroupScreen extends HookWidget {
   const NewGroupScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _name = useState<String>('');
+    final _nameController = useTextEditingController(text: '');
     final _default = useState<bool>(false);
     final _loading = useState<bool>(false);
     return Scaffold(
@@ -25,7 +24,7 @@ class NewGroupScreen extends HookWidget {
                     _loading.value = true;
                     final group =
                         await ApiController.instance.group.createGroup(
-                      _name.value,
+                      _nameController.text,
                       _default.value,
                     );
                     _loading.value = false;
@@ -42,12 +41,14 @@ class NewGroupScreen extends HookWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextFieldListTile(
-              value: _name.value,
-              labelText: 'Name',
-              onChange: (value) {
-                _name.value = value;
-              },
+            ListTile(
+              title: TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                ),
+                keyboardType: TextInputType.text,
+              ),
             ),
             SwitchListTile(
               value: _default.value,
