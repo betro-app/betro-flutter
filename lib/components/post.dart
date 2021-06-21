@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../api/types/FeedResource.dart';
 import '../api/types/LikeResponse.dart';
 import '../api/types/UserInfo.dart';
-import '../screens/user.dart';
+import './userinfo.dart';
 import '../api/api.dart';
 
 ImageFrameBuilder _frameBuilder = (BuildContext context, Widget child,
@@ -28,48 +28,22 @@ class PostTile extends StatelessWidget {
   }) : super(key: key);
 
   final PostResource post;
-  String _accountName(PostResourceUser user) {
-    var _name = '';
-    final first_name = user.first_name;
-    final last_name = user.last_name;
-    if (first_name != null) {
-      _name = first_name + (last_name == null ? '' : ' ' + last_name);
-    }
-    return _name;
-  }
 
   Widget _buildUserInfo(BuildContext context) {
     final user = post.user;
     if (user == null) {
       return Container();
     }
-    final profile_picture = user.profile_picture;
-    return ListTile(
-      onTap: () {
-        Navigator.of(context).pushNamed(
-          '/user',
-          arguments: UserScreenProps(
-            username: user.username,
-            initialData: UserInfo(
-              id: post.user_id,
-              is_approved: true,
-              is_following: true,
-              username: user.username,
-              first_name: user.first_name,
-              last_name: user.last_name,
-              profile_picture: user.profile_picture,
-            ),
-          ),
-        );
-      },
-      leading: profile_picture == null
-          ? null
-          : Image.memory(
-              profile_picture,
-              frameBuilder: _frameBuilder,
-            ),
-      title: Text(_accountName(user)),
-      subtitle: Text(user.username),
+    return UserListTile(
+      user: UserInfo(
+        id: post.user_id,
+        is_approved: true,
+        is_following: true,
+        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        profile_picture: user.profile_picture,
+      ),
     );
   }
 

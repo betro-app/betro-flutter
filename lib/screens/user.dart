@@ -1,10 +1,11 @@
-import 'package:betro/components/feed.dart';
-import 'package:betro/hooks/feed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../hooks/user.dart';
 import '../components/drawer.dart';
+import '../hooks/feed.dart';
+import '../components/feed.dart';
+import '../components/userinfo.dart';
 import '../api/types/UserInfo.dart';
 
 class UserScreenProps {
@@ -20,37 +21,12 @@ class UserScreen extends HookWidget {
   final UserScreenProps props;
   final ScrollController _controller = ScrollController();
 
-  String _accountName(UserInfo user) {
-    var _name = '';
-    final first_name = user.first_name;
-    final last_name = user.last_name;
-    if (first_name != null) {
-      _name = first_name + (last_name == null ? '' : ' ' + last_name);
-    }
-    return _name;
-  }
-
   Widget _buildUserInfo(UserInfo? user) {
     if (user == null) {
       return Container();
     }
-    final profile_picture = user.profile_picture;
-    return ListTile(
-      leading: profile_picture == null
-          ? null
-          : Image.memory(
-              profile_picture,
-            ),
-      title: Text(_accountName(user)),
-      subtitle: Text(user.username),
-      trailing: user.is_approved
-          ? Text('Already following')
-          : user.is_following
-              ? Text('Follow request sent')
-              : ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Follow'),
-                ),
+    return UserListTile(
+      user: user,
     );
   }
 

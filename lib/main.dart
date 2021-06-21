@@ -4,8 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 
-// import './router.dart';
-
 import '../screens/groups.dart';
 import '../screens/newgroup.dart';
 import '../screens/login.dart';
@@ -19,14 +17,17 @@ import '../screens/followers.dart';
 import '../screens/followees.dart';
 import '../screens/posts.dart';
 import '../screens/newpost.dart';
+import '../screens/search.dart';
+import './theme.dart';
 
 final _logger = Logger('main');
+final _lightTheme = lightTheme();
+final _darkTheme = darkTheme();
 
 void main() {
   Logger.root.level = kReleaseMode ? Level.WARNING : Level.FINE;
   PrintAppender().attachToLogger(Logger.root);
   _logger.fine('Application launched');
-  // AppRouter.defineRoutes();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -36,15 +37,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-        accentColor: Colors.lightBlue,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.purple,
-        accentColor: Colors.lightBlue,
-      ),
+      theme: _lightTheme,
+      darkTheme: _darkTheme,
       routes: {
         '/': (context) => LoadingScreen(),
         '/login': (context) => LoginScreen(),
@@ -63,6 +57,7 @@ class MyApp extends StatelessWidget {
         '/approvals': (context) => ApprovalsScreen(),
         '/posts': (context) => PostsScreen(),
         '/post': (context) => NewPostScreen(),
+        '/search': (context) => SearchUsersScreen(),
       },
       // onGenerateRoute: AppRouter.router.generator,
     );

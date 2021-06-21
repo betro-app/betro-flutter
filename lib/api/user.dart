@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import './auth.dart';
 import './helper.dart';
 import './types/UserInfo.dart';
@@ -32,14 +30,13 @@ class UserController {
     );
   }
 
-  Future<List<SearchUserResource>?> fetchSearchUser(String query,
-      [String? after]) async {
+  Future<List<SearchUserResource>?> fetchSearchUser(
+    String query,
+  ) async {
     final encryptionKey = auth.encryptionKey;
     if (encryptionKey == null) return null;
-    const limit = 20;
-    after ??= base64Encode(utf8.encode(DateTime.now().toIso8601String()));
-    final response = await auth.http1Client
-        .get('/api/follow/search??query=$query&limit=$limit&after=$after');
+    final response =
+        await auth.http1Client.get('/api/user/search?query=$query');
     final resp = (response.data as List<dynamic>)
         .map((a) => SearchUserResponse.fromJson(a))
         .toList();
