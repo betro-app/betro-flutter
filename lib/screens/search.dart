@@ -6,8 +6,6 @@ import '../api/types/SearchUserResource.dart';
 import '../components/userinfo.dart';
 import '../api/types/UserInfo.dart';
 
-bool loadOnScroll = true;
-
 class SearchUsersScreen extends HookWidget {
   const SearchUsersScreen({Key? key}) : super(key: key);
 

@@ -14,6 +14,7 @@ import './types/TokenResponse.dart';
 import './types/EcdhKeyResource.dart';
 
 final _logger = Logger('api/auth');
+bool enableCache = false;
 
 // Global options
 Future<CacheOptions> getCacheOptions() async {
@@ -54,8 +55,10 @@ class AuthController {
     if (_logger.level <= Level.FINER) {
       client.interceptors.add(LogInterceptor());
     }
-    getCacheOptions().then((value) =>
-        client.interceptors.add(DioCacheInterceptor(options: value)));
+    if (enableCache) {
+      getCacheOptions().then((value) =>
+          client.interceptors.add(DioCacheInterceptor(options: value)));
+    }
     final httpClientAdapter = Http2Adapter(
       ConnectionManager(
         idleTimeout: 100000,

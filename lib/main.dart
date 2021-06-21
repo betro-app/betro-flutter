@@ -18,6 +18,7 @@ import '../screens/followees.dart';
 import '../screens/posts.dart';
 import '../screens/newpost.dart';
 import '../screens/search.dart';
+import '../screens/notifications.dart';
 import './theme.dart';
 
 final _logger = Logger('main');
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         '/posts': (context) => PostsScreen(),
         '/post': (context) => NewPostScreen(),
         '/search': (context) => SearchUsersScreen(),
+        '/notifications': (context) => NotificationsScreen(),
       },
       // onGenerateRoute: AppRouter.router.generator,
     );
