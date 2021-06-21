@@ -41,5 +41,6 @@ class FollowerResponse extends ProfileGrantRow {
         );
   factory FollowerResponse.fromJson(Map<String, dynamic> json) =>
       _$FollowerResponseFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$FollowerResponseToJson(this);
 }

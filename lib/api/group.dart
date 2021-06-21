@@ -46,6 +46,7 @@ class GroupController {
       '/api/groups',
       data: jsonEncode(req),
     );
+    _logger.finer(response.data);
     return GroupResponse.fromJson(response.data);
   }
 }

@@ -4,10 +4,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../providers/groups.dart';
 import '../api/api.dart';
-import '../api/types/GroupResponse.dart';
 import 'common.dart';
 
-LoadingListDataCallback<T> Function() _fetchListHookCreator<T>(
+LoadingListDataCallback<T> Function() fetchListHookCreator<T>(
   Future<List<T>?> Function() fetch,
 ) {
   LoadingListDataCallback<T> useFetchList() {

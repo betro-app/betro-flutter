@@ -160,6 +160,7 @@ class FollowController {
     );
     final response =
         await auth.http1Client.post('/api/follow/', data: jsonEncode(req));
+    _logger.finer(response.data);
     return FollowUserResponse.fromJson(response.data);
   }
 

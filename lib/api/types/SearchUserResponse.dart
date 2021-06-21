@@ -33,5 +33,6 @@ class SearchUserResponse extends ProfileGrantRow {
         );
   factory SearchUserResponse.fromJson(Map<String, dynamic> json) =>
       _$SearchUserResponseFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$SearchUserResponseToJson(this);
 }

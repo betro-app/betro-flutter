@@ -33,5 +33,6 @@ class ApprovalResponse extends ProfileGrantRow {
         );
   factory ApprovalResponse.fromJson(Map<String, dynamic> json) =>
       _$ApprovalResponseFromJson(json);
+  @override
   Map<String, dynamic> toJson() => _$ApprovalResponseToJson(this);
 }
