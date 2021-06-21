@@ -49,7 +49,7 @@ class UserScreen extends HookWidget {
         onRefresh: () async {
           return Future.wait([
             fetchUser.call(),
-            fetchUserFeed.call(),
+            fetchUserFeed.call(true),
           ]).then((value) => null);
         },
         child: ListView(

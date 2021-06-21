@@ -54,6 +54,10 @@ class Count extends StateNotifier<CountState> {
         break;
     }
   }
+
+  void reset() {
+    state = CountState();
+  }
 }
 
 class CountState {

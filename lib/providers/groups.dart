@@ -27,6 +27,10 @@ class Group extends StateNotifier<GroupState> {
       groups: state.groups?.where((element) => element.id != groupId).toList(),
     );
   }
+
+  void reset() {
+    state = GroupState();
+  }
 }
 
 class GroupState {

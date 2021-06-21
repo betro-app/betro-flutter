@@ -46,8 +46,14 @@ class NotificationsScreen extends HookWidget {
             }
             final result = data[index];
             return ListTile(
-              title: Text(result.content),
-              enabled: !result.read,
+              title: Text(
+                result.content,
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      color: result.read
+                          ? Theme.of(context).disabledColor
+                          : Colors.black,
+                    ),
+              ),
               onTap: () {
                 _loading.value = true;
                 ApiController.instance.notification

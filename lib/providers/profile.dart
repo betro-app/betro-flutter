@@ -30,6 +30,10 @@ class Profile extends StateNotifier<ProfileState> {
       profile_picture: profile_picture,
     );
   }
+
+  void reset() {
+    state = ProfileState();
+  }
 }
 
 class ProfileState {

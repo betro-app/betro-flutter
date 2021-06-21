@@ -11,6 +11,7 @@ import '../hooks/count.dart';
 import '../hooks/profile.dart';
 import '../providers/auth.dart';
 import '../providers/count.dart';
+import '../providers/groups.dart';
 import '../providers/profile.dart';
 
 class AppDrawerBadgeListTile extends StatelessWidget {
@@ -60,6 +61,9 @@ class AppDrawer extends HookWidget {
   Future<void> _logout(BuildContext context) async {
     await ApiController.instance.auth.logout();
     context.read(authProvider.notifier).loggedOut();
+    context.read(countProvider.notifier).reset();
+    context.read(profileProvider.notifier).reset();
+    context.read(groupsProvider.notifier).reset();
     await Navigator.of(context)
         .pushNamedAndRemoveUntil('/login', (route) => false);
   }
