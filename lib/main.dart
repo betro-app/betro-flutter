@@ -61,7 +61,6 @@ class MyApp extends StatelessWidget {
         '/search': (context) => SearchUsersScreen(),
         '/notifications': (context) => NotificationsScreen(),
       },
-      // onGenerateRoute: AppRouter.router.generator,
     );
   }
 }
