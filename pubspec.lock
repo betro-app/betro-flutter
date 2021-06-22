@@ -48,7 +48,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "195eb874188354d4977e88012293665a39590514"
+      resolved-ref: cdf92f1b10ecb9258acda50fc75613a2cc4613e2
       url: "git://github.com/betro-app/betro-dart-lib.git"
     source: git
     version: "0.0.1"
@@ -275,7 +275,7 @@ packages:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2+2"
+    version: "3.0.3"
   file_picker_cross:
     dependency: "direct main"
     description:
@@ -451,7 +451,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.0+3"
+    version: "0.8.0+4"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -883,7 +883,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.6"
+    version: "6.0.7"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -960,7 +960,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.2"
+    version: "2.2.3"
   xdg_directories:
     dependency: transitive
     description:
