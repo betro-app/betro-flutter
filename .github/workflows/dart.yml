@@ -53,13 +53,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libx11-dev pkg-config cmake ninja-build libblkid-dev liblzma-dev libjsoncpp-dev clang
       - name: Enable desktop support
-        run: |
-          flutter config --enable-linux-desktop
-          flutter config --enable-macos-desktop
-          flutter config --enable-windows-desktop
+        run: flutter config --enable-${{matrix.TARGET}}-desktop
 
       - name: Configure project for desktop
-        run: flutter create --project-name=betro --platforms=windows,macos,linux .
+        run: flutter create --project-name=betro --platforms=${{matrix.TARGET}} .
 
       - name: Doctor
         # Run doctor, for ease of debugging any issues.

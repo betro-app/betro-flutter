@@ -131,7 +131,7 @@ class LoginScreen extends HookWidget {
                 child: GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed('/register'),
                   child: Text('Register',
-                      style: Theme.of(context).accentTextTheme.subtitle1),
+                      style: Theme.of(context).primaryTextTheme.subtitle1),
                 ),
               ),
             ],

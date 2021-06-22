@@ -43,7 +43,7 @@ class AppDrawerBadgeListTile extends StatelessWidget {
               position: BadgePosition.topEnd(),
               shape: BadgeShape.circle,
               borderRadius: BorderRadius.circular(100),
-              badgeColor: Theme.of(context).accentColor,
+              badgeColor: Theme.of(context).primaryColor,
               badgeContent: Container(
                 height: 5,
                 width: 5,
