@@ -1,7 +1,7 @@
 # betro
 
-[![Build Status](https://github.com/prijindal/betro-flutter/actions/workflows/dart.yml/badge.svg)](https://github.com/prijindal/betro-flutter/actions/workflows/dart.yml)
-[![codecov](https://codecov.io/gh/prijindal/betro-flutter/branch/master/graph/badge.svg)](https://codecov.io/gh/prijindal/betro-flutter)
+[![Build Status](https://github.com/betro-app/betro-flutter/actions/workflows/dart.yml/badge.svg)](https://github.com/betro-app/betro-flutter/actions/workflows/dart.yml)
+[![codecov](https://codecov.io/gh/betro-app/betro-flutter/branch/master/graph/badge.svg)](https://codecov.io/gh/betro-app/betro-flutter)
 
 A new Flutter project.
 
