@@ -17,7 +17,7 @@ class FeedController {
     if (encryptionKey == null) return null;
     const limit = 20;
     after ??= base64Encode(utf8.encode(DateTime.now().toIso8601String()));
-    final response = await auth.http1Client
+    final response = await auth.client
         .get<Map<String, dynamic>>('/api/feed?limit=$limit&after=$after');
     final data = response.data;
     if (data != null) {
@@ -35,7 +35,7 @@ class FeedController {
     if (encryptionKey == null) return null;
     const limit = 20;
     after ??= base64Encode(utf8.encode(DateTime.now().toIso8601String()));
-    final response = await auth.http1Client.get<Map<String, dynamic>>(
+    final response = await auth.client.get<Map<String, dynamic>>(
         '/api/user/$username/posts?limit=$limit&after=$after');
     final data = response.data;
     if (data != null) {
@@ -53,7 +53,7 @@ class FeedController {
     if (encryptionKey == null) return null;
     const limit = 20;
     after ??= base64Encode(utf8.encode(DateTime.now().toIso8601String()));
-    final response = await auth.http1Client.get<Map<String, dynamic>>(
+    final response = await auth.client.get<Map<String, dynamic>>(
         '/api/account/posts?limit=$limit&after=$after');
     final data = response.data;
     if (data != null) {

@@ -15,14 +15,14 @@ class GroupController {
   GroupController(this.auth);
 
   Future<List<GroupResponse>> fetchGroups() async {
-    final response = await auth.http1Client.get('/api/groups');
+    final response = await auth.client.get('/api/groups');
     return (response.data as List<dynamic>)
         .map((a) => GroupResponse.fromJson(a))
         .toList();
   }
 
   Future<bool> deleteGroup(String groupId) async {
-    final response = await auth.http1Client.delete('/api/groups/$groupId');
+    final response = await auth.client.delete('/api/groups/$groupId');
     return response.data['deleted'];
   }
 
@@ -42,7 +42,7 @@ class GroupController {
       name: name,
       is_default: is_default,
     );
-    final response = await auth.http1Client.post(
+    final response = await auth.client.post(
       '/api/groups',
       data: jsonEncode(req),
     );

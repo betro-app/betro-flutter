@@ -49,7 +49,6 @@ class AuthController {
   Uint8List? symKey;
   Map<String, EcdhKeyResource> ecdhKeys = {};
   AuthController(this.host) : client = Dio(BaseOptions(baseUrl: host)) {
-    client.options.headers['accept-encoding'] = 'gzip, deflate, br';
     client.options.headers['charset'] = 'UTF-8';
     client.options.headers['accept'] = 'application/json, text/plain, */*';
     client.options.headers['content-type'] = 'application/json';

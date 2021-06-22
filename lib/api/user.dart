@@ -13,7 +13,7 @@ class UserController {
   Future<UserInfo?> fetchUserInfo(String username) async {
     final encryptionKey = auth.encryptionKey;
     if (encryptionKey == null) return null;
-    final response = await auth.http1Client.get('/api/user/$username');
+    final response = await auth.client.get('/api/user/$username');
     final data = response.data;
     if (data == null) return null;
     final user = UserInfoResponse.fromJson(data);
@@ -35,8 +35,7 @@ class UserController {
   ) async {
     final encryptionKey = auth.encryptionKey;
     if (encryptionKey == null) return null;
-    final response =
-        await auth.http1Client.get('/api/user/search?query=$query');
+    final response = await auth.client.get('/api/user/search?query=$query');
     final resp = (response.data as List<dynamic>)
         .map((a) => SearchUserResponse.fromJson(a))
         .toList();
@@ -60,7 +59,7 @@ class UserController {
   }
 
   Future<UserEcdhKeyResponse> fetchUserEcdhKey(String id) async {
-    final response = await auth.http1Client.get('/api/keys/ecdh/user/$id');
+    final response = await auth.client.get('/api/keys/ecdh/user/$id');
     return UserEcdhKeyResponse.fromJson(response.data);
   }
 }

@@ -28,7 +28,7 @@ class FollowController {
     if (encryptionKey == null) return null;
     const limit = 20;
     after ??= base64Encode(utf8.encode(DateTime.now().toIso8601String()));
-    final response = await auth.http1Client
+    final response = await auth.client
         .get('/api/follow/approvals?limit=$limit&after=$after');
     final resp = PaginatedResponse<ApprovalResponse>.fromJson(
         response.data, (json) => ApprovalResponse.fromJson(json));
@@ -65,7 +65,7 @@ class FollowController {
     if (encryptionKey == null) return null;
     const limit = 20;
     after ??= base64Encode(utf8.encode(DateTime.now().toIso8601String()));
-    final response = await auth.http1Client
+    final response = await auth.client
         .get('/api/follow/followers?limit=$limit&after=$after');
     final resp = PaginatedResponse<FollowerResponse>.fromJson(
         response.data, (json) => FollowerResponse.fromJson(json));
@@ -104,7 +104,7 @@ class FollowController {
     if (encryptionKey == null) return null;
     const limit = 20;
     after ??= base64Encode(utf8.encode(DateTime.now().toIso8601String()));
-    final response = await auth.http1Client
+    final response = await auth.client
         .get('/api/follow/followees?limit=$limit&after=$after');
     final resp = PaginatedResponse<FolloweeResponse>.fromJson(
         response.data, (json) => FolloweeResponse.fromJson(json));
@@ -159,7 +159,7 @@ class FollowController {
       encrypted_profile_sym_key: encrypted_profile_sym_key,
     );
     final response =
-        await auth.http1Client.post('/api/follow/', data: jsonEncode(req));
+        await auth.client.post('/api/follow/', data: jsonEncode(req));
     _logger.finer(response.data);
     return FollowUserResponse.fromJson(response.data);
   }
@@ -193,8 +193,8 @@ class FollowController {
       encrypted_profile_sym_key: encrypted_profile_sym_key,
       own_key_id: own_key_id,
     );
-    final response = await auth.http1Client
-        .post('/api/follow/approve', data: jsonEncode(req));
+    final response =
+        await auth.client.post('/api/follow/approve', data: jsonEncode(req));
     return response.data['approved'];
   }
 }

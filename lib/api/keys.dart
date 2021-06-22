@@ -61,7 +61,7 @@ class KeysController {
         },
       ),
     );
-    final response = await auth.http1Client.post('/api/keys/ecdh/upload',
+    final response = await auth.client.post('/api/keys/ecdh/upload',
         data: encryptedKeyPairsRequest.map((e) => e.toJson()).toList());
     final data = response.data;
     if (data == null) return false;
@@ -74,7 +74,7 @@ class KeysController {
 
   Future<bool> fetchExistingEcdhKeys() async {
     final response =
-        await auth.http1Client.get('/api/keys/ecdh?include_types=unclaimed');
+        await auth.client.get('/api/keys/ecdh?include_types=unclaimed');
     final data = response.data;
     if (data == null) return false;
     final encryptedKeyPairs = (data as List<dynamic>)

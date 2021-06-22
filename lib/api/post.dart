@@ -19,7 +19,7 @@ class PostController {
     final encryptionKey = auth.encryptionKey;
     if (encryptionKey == null) return null;
     final response =
-        await auth.http1Client.get<Map<String, dynamic>>('/api/post/$id');
+        await auth.client.get<Map<String, dynamic>>('/api/post/$id');
     final data = response.data;
     if (data == null) {
       return null;

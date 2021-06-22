@@ -20,7 +20,7 @@ class AccountController {
     final symKey = auth.symKey;
     if (symKey == null) return null;
     try {
-      final response = await auth.http1Client.get<String>(
+      final response = await auth.client.get<String>(
           '/api/account/profile_picture',
           options: Options(responseType: ResponseType.plain));
       final data = response.data;
@@ -125,7 +125,7 @@ class AccountController {
           : await symEncryptBuffer(symKey, profile_picture),
     );
     _logger.finer(jsonEncode(request));
-    final response = await auth.http1Client
+    final response = await auth.client
         .post('/api/account/profile', data: jsonEncode(request));
     final profile = UserProfileResponse.fromJson(response.data);
     return _transformProfileResponse(profile);
@@ -150,7 +150,7 @@ class AccountController {
           : await symEncryptBuffer(symKey, profile_picture),
     );
     _logger.finer(jsonEncode(request));
-    final response = await auth.http1Client
+    final response = await auth.client
         .put('/api/account/profile', data: jsonEncode(request));
     final profile = UserProfileResponse.fromJson(response.data);
     return _transformProfileResponse(profile);
