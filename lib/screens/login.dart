@@ -52,6 +52,7 @@ class LoginScreen extends HookWidget {
                 decoration: InputDecoration(
                   labelText: 'Host',
                 ),
+                autofillHints: [AutofillHints.url],
                 enabled: !_loading.value,
                 keyboardType: TextInputType.text,
                 validator: (value) {
@@ -67,6 +68,7 @@ class LoginScreen extends HookWidget {
                 decoration: InputDecoration(
                   labelText: 'Email',
                 ),
+                autofillHints: [AutofillHints.email],
                 enabled: !_loading.value,
                 keyboardType: TextInputType.text,
                 validator: (value) {
@@ -80,6 +82,7 @@ class LoginScreen extends HookWidget {
                 controller: _passwordFieldController,
                 enabled: !_loading.value,
                 labelText: 'Password',
+                autofillHints: [AutofillHints.password],
               ),
               CheckboxListTile(
                 value: _saveCredentialsController.value,

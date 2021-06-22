@@ -3,7 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 class PasswordFormField extends HookWidget {
   const PasswordFormField(
-      {Key? key, this.controller, this.enabled, this.labelText})
+      {Key? key,
+      this.controller,
+      this.enabled,
+      this.labelText,
+      this.autofillHints})
       : super(key: key);
 
   /// Controls the text being edited.
@@ -28,12 +32,17 @@ class PasswordFormField extends HookWidget {
   /// vertically adjacent to) the input field.
   final String? labelText;
 
+  /// {@macro flutter.widgets.editableText.autofillHints}
+  /// {@macro flutter.services.AutofillConfiguration.autofillHints}
+  final Iterable<String>? autofillHints;
+
   @override
   Widget build(BuildContext context) {
     final visible = useState<bool>(false);
     return TextFormField(
       controller: controller,
       obscureText: !visible.value,
+      autofillHints: autofillHints,
       decoration: InputDecoration(
         suffixIcon: IconButton(
           icon: visible.value
