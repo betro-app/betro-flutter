@@ -26,6 +26,7 @@ class HomeScreen extends HookWidget {
           return fetchHomeFeed.call(true);
         },
         child: PostsFeed(
+          allowUserNavigation: true,
           hook: fetchHomeFeed,
           loadOnScroll: true,
         ),

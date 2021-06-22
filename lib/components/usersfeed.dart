@@ -62,6 +62,7 @@ class UsersListFeed<T> extends HookWidget {
           }
         }
         return UserListTile(
+          allowNavigation: true,
           user: mapUserInfo(
             paginatedData.data[index],
           ),

@@ -59,6 +59,7 @@ class SearchUsersScreen extends HookWidget {
           }
           final result = data[index];
           return UserListTile(
+            allowNavigation: true,
             user: UserInfo(
               id: result.id,
               is_approved: result.is_following,

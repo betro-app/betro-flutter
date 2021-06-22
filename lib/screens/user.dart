@@ -26,6 +26,7 @@ class UserScreen extends HookWidget {
       return Container();
     }
     return UserListTile(
+      allowNavigation: false,
       user: user,
     );
   }
@@ -56,6 +57,7 @@ class UserScreen extends HookWidget {
           children: [
             _buildUserInfo(fetchUser.data),
             PostsFeed(
+              allowUserNavigation: false,
               hook: fetchUserFeed,
               shrinkWrap: true,
               controller: _controller,
@@ -63,7 +65,6 @@ class UserScreen extends HookWidget {
           ],
         ),
       ),
-      // body: ,
     );
   }
 }

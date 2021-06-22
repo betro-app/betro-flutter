@@ -25,9 +25,11 @@ class PostTile extends StatelessWidget {
   const PostTile({
     Key? key,
     required this.post,
+    this.allowUserNavigation = false,
   }) : super(key: key);
 
   final PostResource post;
+  final bool allowUserNavigation;
 
   Widget _buildUserInfo(BuildContext context) {
     final user = post.user;
@@ -35,6 +37,7 @@ class PostTile extends StatelessWidget {
       return Container();
     }
     return UserListTile(
+      allowNavigation: allowUserNavigation,
       user: UserInfo(
         id: post.user_id,
         is_approved: true,

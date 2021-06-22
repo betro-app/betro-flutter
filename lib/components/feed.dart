@@ -9,6 +9,7 @@ class PostsFeed extends StatelessWidget {
     required this.hook,
     this.shrinkWrap = false,
     this.loadOnScroll = false,
+    this.allowUserNavigation = false,
     ScrollController? controller,
   })  : _controller = controller ?? ScrollController(),
         super(key: key);
@@ -17,6 +18,7 @@ class PostsFeed extends StatelessWidget {
   final bool shrinkWrap;
   final bool loadOnScroll;
   final ScrollController _controller;
+  final bool allowUserNavigation;
 
   Widget _buildLoading() => const Center(
         child: CircularProgressIndicator(),
@@ -69,6 +71,7 @@ class PostsFeed extends StatelessWidget {
         }
         final post = posts[index];
         return PostTile(
+          allowUserNavigation: allowUserNavigation,
           post: post,
         );
       },

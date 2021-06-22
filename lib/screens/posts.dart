@@ -25,6 +25,7 @@ class PostsScreen extends HookWidget {
           return fetchOwnFeed.call(true);
         },
         child: PostsFeed(
+          allowUserNavigation: false,
           hook: fetchOwnFeed,
           loadOnScroll: true,
         ),

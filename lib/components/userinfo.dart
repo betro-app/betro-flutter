@@ -8,9 +8,12 @@ class UserListTile extends HookWidget {
   UserListTile({
     Key? key,
     required this.user,
+    this.allowNavigation = false,
   }) : super(key: key);
 
   final UserInfo user;
+  final bool allowNavigation;
+
   String get _accountName {
     var _name = '';
     final first_name = user.first_name;
@@ -40,15 +43,17 @@ class UserListTile extends HookWidget {
                   onPressed: () {},
                   child: Text('Follow'),
                 ),
-      onTap: () {
-        Navigator.of(context).pushNamed(
-          '/user',
-          arguments: UserScreenProps(
-            username: user.username,
-            initialData: user,
-          ),
-        );
-      },
+      onTap: allowNavigation == false
+          ? null
+          : () {
+              Navigator.of(context).pushNamed(
+                '/user',
+                arguments: UserScreenProps(
+                  username: user.username,
+                  initialData: user,
+                ),
+              );
+            },
     );
   }
 }
