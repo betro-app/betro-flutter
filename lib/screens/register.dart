@@ -53,7 +53,7 @@ class RegisterScreen extends HookWidget {
                   labelText: 'Host',
                 ),
                 enabled: !_loading.value,
-                autofillHints: [AutofillHints.url],
+                autofillHints: _loading.value ? null : [AutofillHints.url],
                 keyboardType: TextInputType.text,
                 validator: (value) {
                   if (value != null && value.isEmpty) {
@@ -68,7 +68,8 @@ class RegisterScreen extends HookWidget {
                 decoration: InputDecoration(
                   labelText: 'Username',
                 ),
-                autofillHints: [AutofillHints.newUsername],
+                autofillHints:
+                    _loading.value ? null : [AutofillHints.newUsername],
                 enabled: !_loading.value,
                 keyboardType: TextInputType.text,
                 validator: (value) {
@@ -84,7 +85,7 @@ class RegisterScreen extends HookWidget {
                 decoration: InputDecoration(
                   labelText: 'Email',
                 ),
-                autofillHints: [AutofillHints.email],
+                autofillHints: _loading.value ? null : [AutofillHints.email],
                 enabled: !_loading.value,
                 keyboardType: TextInputType.text,
                 validator: (value) {
@@ -97,13 +98,14 @@ class RegisterScreen extends HookWidget {
               PasswordFormField(
                 controller: _passwordFieldController,
                 enabled: !_loading.value,
-                autofillHints: [AutofillHints.newPassword],
+                autofillHints:
+                    _loading.value ? null : [AutofillHints.newPassword],
                 labelText: 'Password',
               ),
               PasswordFormField(
                 controller: _confirmPasswordFieldController,
                 enabled: !_loading.value,
-                autofillHints: [AutofillHints.password],
+                autofillHints: _loading.value ? null : [AutofillHints.password],
                 labelText: 'Confirm Password',
               ),
               CheckboxListTile(
