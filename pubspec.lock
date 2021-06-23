@@ -48,7 +48,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: cdf92f1b10ecb9258acda50fc75613a2cc4613e2
+      resolved-ref: "4162981e83aa0c6c0dc5d54ab02e75a996457ce6"
       url: "git://github.com/betro-app/betro-dart-lib.git"
     source: git
     version: "0.0.1"
@@ -93,7 +93,7 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   build_runner_core:
     dependency: transitive
     description:
@@ -142,7 +142,7 @@ packages:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.3.1"
   clock:
     dependency: transitive
     description:
@@ -960,7 +960,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.4"
   xdg_directories:
     dependency: transitive
     description:
