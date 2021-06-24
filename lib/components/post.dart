@@ -5,7 +5,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../api/types/FeedResource.dart';
 import '../api/types/LikeResponse.dart';
 import '../api/types/UserInfo.dart';
-import './userinfo.dart';
+import '../utils/fromNow.dart';
+import '../screens/user.dart';
 import '../api/api.dart';
 
 ImageFrameBuilder _frameBuilder = (BuildContext context, Widget child,
@@ -31,22 +32,54 @@ class PostTile extends StatelessWidget {
   final PostResource post;
   final bool allowUserNavigation;
 
+  String get _accountName {
+    var _name = '';
+    final user = post.user;
+    if (user == null) return _name;
+    final first_name = user.first_name;
+    final last_name = user.last_name;
+    if (first_name != null) {
+      _name = first_name + (last_name == null ? '' : ' ' + last_name);
+    }
+    return _name;
+  }
+
   Widget _buildUserInfo(BuildContext context) {
     final user = post.user;
     if (user == null) {
-      return Container();
+      return ListTile(
+        subtitle: Text(fromNow(post.created_at)),
+      );
     }
-    return UserListTile(
-      allowNavigation: allowUserNavigation,
-      user: UserInfo(
-        id: post.user_id,
-        is_approved: true,
-        is_following: true,
-        username: user.username,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        profile_picture: user.profile_picture,
-      ),
+    final profile_picture = user.profile_picture;
+    return ListTile(
+      leading: profile_picture == null
+          ? null
+          : Image.memory(
+              profile_picture,
+            ),
+      title: Text(_accountName),
+      subtitle: Text(user.username),
+      trailing: Text(fromNow(post.created_at)),
+      onTap: allowUserNavigation == false
+          ? null
+          : () {
+              Navigator.of(context).pushNamed(
+                '/user',
+                arguments: UserScreenProps(
+                  username: user.username,
+                  initialData: UserInfo(
+                    id: post.user_id,
+                    is_approved: true,
+                    is_following: true,
+                    username: user.username,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    profile_picture: user.profile_picture,
+                  ),
+                ),
+              );
+            },
     );
   }
 
