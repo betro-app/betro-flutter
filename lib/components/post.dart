@@ -44,12 +44,19 @@ class PostTile extends StatelessWidget {
     return _name;
   }
 
+  Widget _buildCreatedAt() {
+    return Tooltip(
+      message: post.created_at.toIso8601String(),
+      child: Text(
+        fromNow(post.created_at),
+      ),
+    );
+  }
+
   Widget _buildUserInfo(BuildContext context) {
     final user = post.user;
     if (user == null) {
-      return ListTile(
-        subtitle: Text(fromNow(post.created_at)),
-      );
+      return Container();
     }
     final profile_picture = user.profile_picture;
     return ListTile(
@@ -60,7 +67,6 @@ class PostTile extends StatelessWidget {
             ),
       title: Text(_accountName),
       subtitle: Text(user.username),
-      trailing: Text(fromNow(post.created_at)),
       onTap: allowUserNavigation == false
           ? null
           : () {
@@ -90,6 +96,7 @@ class PostTile extends StatelessWidget {
       if (text_content != null)
         ListTile(
           title: Text(text_content),
+          trailing: _buildCreatedAt(),
         ),
       if (media_content != null)
         Container(
