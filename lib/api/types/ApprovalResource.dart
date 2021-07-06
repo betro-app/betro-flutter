@@ -1,16 +1,16 @@
 import 'dart:typed_data';
 
 class ApprovalResource {
-  String id;
-  String follower_id;
-  String username;
-  DateTime created_at;
-  String? first_name;
-  String? last_name;
-  Uint8List? profile_picture;
-  String? public_key;
-  String? own_key_id;
-  String? own_private_key;
+  final String id;
+  final String follower_id;
+  final String username;
+  final DateTime created_at;
+  final String? first_name;
+  final String? last_name;
+  final Uint8List? profile_picture;
+  final String? public_key;
+  final String? own_key_id;
+  final String? own_private_key;
 
   ApprovalResource({
     required this.id,

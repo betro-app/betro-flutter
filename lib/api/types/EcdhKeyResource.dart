@@ -1,8 +1,8 @@
 class EcdhKeyResource {
-  String id;
-  String public_key;
-  List<int> private_key;
-  bool claimed;
+  final String id;
+  final String public_key;
+  final List<int> private_key;
+  final bool claimed;
 
   EcdhKeyResource({
     required this.id,

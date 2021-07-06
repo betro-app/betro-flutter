@@ -6,7 +6,7 @@ part 'PostUserResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class PostUserResponse extends ProfileGrantRow {
-  String username;
+  final String username;
 
   PostUserResponse({
     required this.username,

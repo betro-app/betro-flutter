@@ -4,9 +4,9 @@ part 'CreateGroupRequest.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class CreateGroupRequest {
-  String sym_key;
-  String name;
-  bool is_default;
+  final String sym_key;
+  final String name;
+  final bool is_default;
 
   CreateGroupRequest({
     required this.sym_key,

@@ -1,18 +1,18 @@
 import 'dart:typed_data';
 
 class FollowerResource {
-  String follow_id;
-  String group_id;
-  bool group_is_default;
-  String group_name;
-  String user_id;
-  String username;
-  bool is_following;
-  bool is_following_approved;
-  String? public_key;
-  String? first_name;
-  String? last_name;
-  Uint8List? profile_picture;
+  final String follow_id;
+  final String group_id;
+  final bool group_is_default;
+  final String group_name;
+  final String user_id;
+  final String username;
+  final bool is_following;
+  final bool is_following_approved;
+  final String? public_key;
+  final String? first_name;
+  final String? last_name;
+  final Uint8List? profile_picture;
 
   FollowerResource({
     required this.follow_id,

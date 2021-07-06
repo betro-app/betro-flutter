@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
 class UserInfo {
-  String id;
-  bool is_following;
-  bool is_approved;
-  String username;
-  String? public_key;
-  String? first_name;
-  String? last_name;
-  Uint8List? profile_picture;
+  final String id;
+  final bool is_following;
+  final bool is_approved;
+  final String username;
+  final String? public_key;
+  final String? first_name;
+  final String? last_name;
+  final Uint8List? profile_picture;
 
   UserInfo({
     required this.id,

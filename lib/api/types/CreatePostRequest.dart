@@ -4,9 +4,9 @@ part 'CreatePostRequest.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class CreatePostRequest {
-  String group_id;
-  String? text_content;
-  String? media_content;
+  final String group_id;
+  final String? text_content;
+  final String? media_content;
 
   CreatePostRequest({
     required this.group_id,

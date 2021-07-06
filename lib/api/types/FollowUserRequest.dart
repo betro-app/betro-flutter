@@ -4,10 +4,10 @@ part 'FollowUserRequest.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class FollowUserRequest {
-  String followee_id;
-  String own_key_id;
-  String followee_key_id;
-  String? encrypted_profile_sym_key;
+  final String followee_id;
+  final String own_key_id;
+  final String followee_key_id;
+  final String? encrypted_profile_sym_key;
 
   FollowUserRequest({
     required this.followee_id,

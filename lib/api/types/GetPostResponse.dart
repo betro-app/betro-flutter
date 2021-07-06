@@ -6,7 +6,7 @@ part 'GetPostResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class GetPostResponse {
-  GetPost post;
+  final GetPost post;
   PostUserResponse user;
 
   GetPostResponse(this.post, this.user);
@@ -17,7 +17,7 @@ class GetPostResponse {
 
 @JsonSerializable()
 class GetPost extends PostResponse {
-  String key;
+  final String key;
 
   GetPost({
     required this.key,

@@ -4,9 +4,9 @@ part 'FollowUserResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class FollowUserResponse {
-  bool is_following;
-  bool is_approved;
-  String email;
+  final bool is_following;
+  final bool is_approved;
+  final String email;
 
   FollowUserResponse(
     this.is_following,

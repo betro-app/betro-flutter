@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -6,7 +5,7 @@ import '../api/api.dart';
 import '../providers/count.dart';
 import 'common.dart';
 
-LoadingVoidCallback useFetchCount(BuildContext context, WidgetRef ref) {
+LoadingVoidCallback useFetchCount(WidgetRef ref) {
   var loading = useState<bool>(false);
   final fetchCount = useCallback(() {
     loading.value = true;

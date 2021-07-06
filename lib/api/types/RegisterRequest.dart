@@ -4,11 +4,11 @@ part 'RegisterRequest.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class RegisterRequest {
-  String username;
-  String email;
-  String master_hash;
-  String sym_key;
-  bool inhibit_login;
+  final String username;
+  final String email;
+  final String master_hash;
+  final String sym_key;
+  final bool inhibit_login;
 
   RegisterRequest({
     required this.username,

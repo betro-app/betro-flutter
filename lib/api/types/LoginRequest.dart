@@ -4,8 +4,8 @@ part 'LoginRequest.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class LoginRequest {
-  String email;
-  String master_hash;
+  final String email;
+  final String master_hash;
 
   LoginRequest(this.email, this.master_hash);
   factory LoginRequest.fromJson(Map<String, dynamic> json) =>

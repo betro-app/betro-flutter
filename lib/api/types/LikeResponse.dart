@@ -4,8 +4,8 @@ part 'LikeResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class LikeResponse {
-  bool liked;
-  int? likes;
+  final bool liked;
+  final int? likes;
 
   LikeResponse(this.liked, this.likes);
   factory LikeResponse.fromJson(Map<String, dynamic> json) =>

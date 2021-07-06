@@ -4,11 +4,11 @@ part 'EcdhKeyResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class EcdhKeyResponse {
-  String id;
-  String user_id;
-  String public_key;
-  String private_key;
-  bool claimed;
+  final String id;
+  final String user_id;
+  final String public_key;
+  final String private_key;
+  final bool claimed;
 
   EcdhKeyResponse({
     required this.id,

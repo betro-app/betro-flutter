@@ -6,13 +6,13 @@ enum NotificationActions { notification_on_approved, notification_on_followed }
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class NotificationResponse {
-  String id;
-  String user_id;
-  NotificationActions action;
-  String content;
-  bool read;
-  dynamic payload;
-  DateTime created_at;
+  final String id;
+  final String user_id;
+  final NotificationActions action;
+  final String content;
+  final bool read;
+  final dynamic payload;
+  final DateTime created_at;
 
   NotificationResponse({
     required this.id,

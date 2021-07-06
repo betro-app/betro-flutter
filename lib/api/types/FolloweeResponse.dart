@@ -5,10 +5,10 @@ part 'FolloweeResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class FolloweeResponse extends ProfileGrantRow {
-  String user_id;
-  String follow_id;
-  String username;
-  bool is_approved;
+  final String user_id;
+  final String follow_id;
+  final String username;
+  final bool is_approved;
 
   FolloweeResponse({
     required this.user_id,

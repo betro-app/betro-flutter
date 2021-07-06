@@ -24,7 +24,7 @@ class LoginScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isSecureStorageAvailable = useIsSecureStorageAvailable(context);
+    final isSecureStorageAvailable = useIsSecureStorageAvailable();
     final saveToLocal = useSaveToLocal(ref);
     final _loading = useState<bool>(false);
     final _auth = ref.watch(authProvider);

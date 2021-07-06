@@ -4,11 +4,11 @@ part 'WhoamiResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class WhoamiResponse {
-  String? user_id;
-  String? username;
-  String? email;
-  String? first_name;
-  String? last_name;
+  final String? user_id;
+  final String? username;
+  final String? email;
+  final String? first_name;
+  final String? last_name;
 
   WhoamiResponse(
       this.user_id, this.username, this.email, this.first_name, this.last_name);

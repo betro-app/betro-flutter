@@ -8,10 +8,10 @@ part 'PostsFeedResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class PostsFeedResponse {
-  List<PostResponse> posts;
-  Map<String, PostUserResponse> users;
-  Map<String, String> keys;
-  PageInfo pageInfo;
+  final List<PostResponse> posts;
+  final Map<String, PostUserResponse> users;
+  final Map<String, String> keys;
+  final PageInfo pageInfo;
 
   PostsFeedResponse({
     required this.posts,

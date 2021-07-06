@@ -4,8 +4,8 @@ part 'EcPairRequest.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class EcPairRequest {
-  String public_key;
-  String private_key;
+  final String public_key;
+  final String private_key;
 
   EcPairRequest(
     this.public_key,

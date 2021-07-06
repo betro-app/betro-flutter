@@ -86,10 +86,10 @@ class AppDrawer extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider);
     final count = ref.watch(countProvider);
-    final resetLocal = useResetLocal(context);
+    final resetLocal = useResetLocal();
     final fetchProfilePicture = useFetchProfilePicture(ref);
     final fetchProfile = useFetchProfile(ref);
-    final fetchCount = useFetchCount(context, ref);
+    final fetchCount = useFetchCount(ref);
     useEffect(() {
       if (!profile.isProfilePictureLoaded && !fetchProfilePicture.loading) {
         fetchProfilePicture.call();

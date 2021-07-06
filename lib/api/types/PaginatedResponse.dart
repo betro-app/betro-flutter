@@ -1,9 +1,9 @@
 class PaginatedResponse<T> {
-  List<T> data;
-  bool next;
-  int limit;
-  int total;
-  String? after;
+  final List<T> data;
+  final bool next;
+  final int limit;
+  final int total;
+  final String? after;
 
   PaginatedResponse({
     required this.data,

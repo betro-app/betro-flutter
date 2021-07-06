@@ -4,11 +4,11 @@ part 'PageInfo.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class PageInfo {
-  bool updating;
-  bool next;
-  int limit;
-  int total;
-  String? after;
+  final bool updating;
+  final bool next;
+  final int limit;
+  final int total;
+  final String? after;
 
   PageInfo({
     required this.updating,

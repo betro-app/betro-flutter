@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'PageInfo.dart';
 
 class FeedResource {
-  List<PostResource> data;
-  PageInfo pageInfo;
+  final List<PostResource> data;
+  final PageInfo pageInfo;
 
   FeedResource({
     required this.data,
@@ -27,15 +27,15 @@ class UserProfile {
 }
 
 class PostResource {
-  String id;
+  final String id;
   String user_id;
-  String? text_content;
-  Uint8List? media_content;
-  String? media_encoding;
-  int likes;
-  bool is_liked;
+  final String? text_content;
+  final Uint8List? media_content;
+  final String? media_encoding;
+  final int likes;
+  final bool is_liked;
   PostResourceUser? user;
-  DateTime created_at;
+  final DateTime created_at;
 
   PostResource({
     required this.id,
@@ -51,10 +51,10 @@ class PostResource {
 }
 
 class PostResourceUser {
-  String username;
-  String? first_name;
-  String? last_name;
-  Uint8List? profile_picture;
+  final String username;
+  final String? first_name;
+  final String? last_name;
+  final Uint8List? profile_picture;
 
   PostResourceUser({
     required this.username,

@@ -4,7 +4,7 @@ part 'TokenResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class TokenResponse {
-  String token;
+  final String token;
 
   TokenResponse(this.token);
   factory TokenResponse.fromJson(Map<String, dynamic> json) =>

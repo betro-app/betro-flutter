@@ -4,11 +4,11 @@ part 'ApproveUserRequest.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class ApproveUserRequest {
-  String follow_id;
-  String group_id;
-  String encrypted_group_sym_key;
-  String own_key_id;
-  String? encrypted_profile_sym_key;
+  final String follow_id;
+  final String group_id;
+  final String encrypted_group_sym_key;
+  final String own_key_id;
+  final String? encrypted_profile_sym_key;
 
   ApproveUserRequest({
     required this.follow_id,

@@ -4,10 +4,10 @@ part 'UserProfileResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class UserProfileResponse {
-  String? sym_key;
-  String? profile_picture;
-  String? first_name;
-  String? last_name;
+  final String? sym_key;
+  final String? profile_picture;
+  final String? first_name;
+  final String? last_name;
 
   UserProfileResponse({
     this.sym_key,
@@ -21,10 +21,10 @@ class UserProfileResponse {
 }
 
 class UserProfile {
-  String? sym_key;
-  List<int>? profile_picture;
-  String? first_name;
-  String? last_name;
+  final String? sym_key;
+  final List<int>? profile_picture;
+  final String? first_name;
+  final String? last_name;
 
   UserProfile({
     this.sym_key,

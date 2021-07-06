@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,8 +19,7 @@ const SYM_KEY_SHARED_KEY = 'SYM_KEY';
 
 final _logger = Logger('hooks/auth');
 
-LoadingDataCallback<bool, void> useIsSecureStorageAvailable(
-    BuildContext context) {
+LoadingDataCallback<bool, void> useIsSecureStorageAvailable() {
   var loading = useState<bool>(false);
   var isAvailable = useState<bool>(false);
   final checkAvailable = useCallback(([void _]) async {
@@ -123,7 +121,7 @@ LoadingCallback<bool> useSaveToLocal(WidgetRef ref) {
   return LoadingCallback<bool>(loading.value, saveToLocal);
 }
 
-LoadingVoidCallback useResetLocal(BuildContext context) {
+LoadingVoidCallback useResetLocal() {
   var loading = useState<bool>(false);
   final resetLocal = useCallback(() {
     loading.value = true;

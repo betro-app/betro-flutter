@@ -4,10 +4,10 @@ part 'GroupResponse.g.dart';
 
 @JsonSerializable() // This annotation let instances of MyData travel to/from JSON
 class GroupResponse {
-  String id;
-  String sym_key;
-  String name;
-  bool is_default;
+  final String id;
+  final String sym_key;
+  final String name;
+  final bool is_default;
 
   GroupResponse({
     required this.id,
