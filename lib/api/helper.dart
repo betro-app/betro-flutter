@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:logging/logging.dart';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 
 import './types/FeedResource.dart';
@@ -8,6 +9,8 @@ import './types/PostResponse.dart';
 import './types/ProfileGrantRow.dart';
 import './types/PostUserResponse.dart';
 import './types/PostsFeedResponse.dart';
+
+final _logger = Logger('api/helper');
 
 typedef PostToSymKeyFunction = Future<Uint8List?> Function(
     String encryptionKey,
@@ -102,6 +105,7 @@ Future<List<PostResource>?> transformPostFeed(
       }
     }
   }
+  _logger.finest(users);
 
   final postFutures = <Future<PostResource>>[];
 
@@ -154,6 +158,7 @@ Future<FeedResource> defaultTransformFunction(TransformPostFeedPayload payload,
   final feed = PostsFeedResponse.fromJson(payload.feedJson);
   final posts =
       await transformPostFeed(payload.encryptionKey, feed, postToSymKey);
+  _logger.finest(posts);
   return FeedResource(
     data: posts ?? [],
     pageInfo: feed.pageInfo,
