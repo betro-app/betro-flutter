@@ -6,13 +6,13 @@ import '../api/api.dart';
 import '../providers/count.dart';
 import 'common.dart';
 
-LoadingVoidCallback useFetchCount(BuildContext context) {
+LoadingVoidCallback useFetchCount(BuildContext context, WidgetRef ref) {
   var loading = useState<bool>(false);
   final fetchCount = useCallback(() {
     loading.value = true;
     ApiController.instance.account.fetchCounts().then((value) {
       if (value != null) {
-        context.read(countProvider.notifier).loaded(
+        ref.read(countProvider.notifier).loaded(
               notifications: value.notifications,
               settings: value.settings,
               groups: value.groups,

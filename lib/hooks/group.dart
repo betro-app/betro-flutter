@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -33,12 +32,12 @@ LoadingListDataCallback<T> Function() fetchListHookCreator<T>(
   return useFetchList;
 }
 
-LoadingVoidCallback useFetchGroups(BuildContext context) {
+LoadingVoidCallback useFetchGroups(WidgetRef ref) {
   final loading = useState<bool>(false);
   final getResponse = useCallback(() async {
     loading.value = true;
     final resp = await ApiController.instance.group.fetchGroups();
-    context.read(groupsProvider.notifier).groupsLoaded(resp);
+    ref.read(groupsProvider.notifier).groupsLoaded(resp);
     loading.value = false;
   }, []);
   return LoadingVoidCallback(

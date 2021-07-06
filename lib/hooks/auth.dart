@@ -47,7 +47,7 @@ LoadingDataCallback<bool, void> useIsSecureStorageAvailable(
       loading.value, isAvailable.value, checkAvailable);
 }
 
-LoadingVoidCallback useLoadFromLocal(BuildContext context) {
+LoadingVoidCallback useLoadFromLocal(WidgetRef ref) {
   var loading = useState<bool>(false);
   final loadFromLocal = useCallback(() {
     loading.value = true;
@@ -72,13 +72,13 @@ LoadingVoidCallback useLoadFromLocal(BuildContext context) {
           ApiController.instance.auth.setToken(token);
           ApiController.instance.auth.encryptionKey = encryptionKey;
           ApiController.instance.auth.symKey = base64Decode(symKey);
-          context.read(authProvider.notifier).loggedIn(host, email);
+          ref.read(authProvider.notifier).loggedIn(host, email);
         } else {
-          context.read(authProvider.notifier).loaded(host, email);
+          ref.read(authProvider.notifier).loaded(host, email);
         }
         loading.value = false;
       } else {
-        context.read(authProvider.notifier).loggedOut();
+        ref.read(authProvider.notifier).loggedOut();
         loading.value = false;
       }
     }).catchError((e, s) {
@@ -89,12 +89,12 @@ LoadingVoidCallback useLoadFromLocal(BuildContext context) {
   return LoadingVoidCallback(loading.value, loadFromLocal);
 }
 
-LoadingCallback<bool> useSaveToLocal(BuildContext context) {
+LoadingCallback<bool> useSaveToLocal(WidgetRef ref) {
   var loading = useState<bool>(false);
   final saveToLocal = useCallback((bool saveSecure) async {
     loading.value = true;
     final instance = await SharedPreferences.getInstance();
-    final auth = context.read(authProvider);
+    final auth = ref.read(authProvider);
     final email = auth.email;
     final host = auth.host;
     await instance.setString(HOST_SHARED_KEY, host);

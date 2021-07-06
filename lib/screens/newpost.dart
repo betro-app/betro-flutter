@@ -10,13 +10,13 @@ import '../providers/groups.dart';
 import '../hooks/group.dart';
 import '../components/ImagePicker.dart';
 
-class NewPostScreen extends HookWidget {
+class NewPostScreen extends HookConsumerWidget {
   const NewPostScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final fetchGroups = useFetchGroups(context);
-    final groupsData = useProvider(groupsProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final fetchGroups = useFetchGroups(ref);
+    final groupsData = ref.watch(groupsProvider);
     final _textController = useTextEditingController.fromValue(
       TextEditingValue.empty,
     );

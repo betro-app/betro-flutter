@@ -11,23 +11,23 @@ import '../components/password.dart';
 
 final _logger = Logger('screens/login');
 
-class LoginScreen extends HookWidget {
+class LoginScreen extends HookConsumerWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   Future<void> _submit(
-      BuildContext context, String host, String email, String password) async {
+      WidgetRef ref, String host, String email, String password) async {
     ApiController.setInstance(host);
     await ApiController.instance.auth.login(email, password);
     await ApiController.instance.keys.fetchKeys();
-    context.read(authProvider.notifier).loggedIn(host, email);
+    ref.read(authProvider.notifier).loggedIn(host, email);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isSecureStorageAvailable = useIsSecureStorageAvailable(context);
-    final saveToLocal = useSaveToLocal(context);
+    final saveToLocal = useSaveToLocal(ref);
     final _loading = useState<bool>(false);
-    final _auth = useProvider(authProvider);
+    final _auth = ref.watch(authProvider);
     final _emailFieldController = useTextEditingController
         .fromValue(TextEditingValue(text: _auth.email ?? ''));
     final _hostFieldController =
@@ -101,7 +101,7 @@ class LoginScreen extends HookWidget {
                         try {
                           _loading.value = true;
                           await _submit(
-                            context,
+                            ref,
                             _hostFieldController.text,
                             _emailFieldController.text,
                             _passwordFieldController.text,

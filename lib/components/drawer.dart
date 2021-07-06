@@ -55,15 +55,15 @@ class AppDrawerBadgeListTile extends StatelessWidget {
       );
 }
 
-class AppDrawer extends HookWidget {
+class AppDrawer extends HookConsumerWidget {
   const AppDrawer({Key? key}) : super(key: key);
 
-  Future<void> _logout(BuildContext context) async {
+  Future<void> _logout(BuildContext context, WidgetRef ref) async {
     await ApiController.instance.auth.logout();
-    context.read(authProvider.notifier).loggedOut();
-    context.read(countProvider.notifier).reset();
-    context.read(profileProvider.notifier).reset();
-    context.read(groupsProvider.notifier).reset();
+    ref.read(authProvider.notifier).loggedOut();
+    ref.read(countProvider.notifier).reset();
+    ref.read(profileProvider.notifier).reset();
+    ref.read(groupsProvider.notifier).reset();
     await Navigator.of(context)
         .pushNamedAndRemoveUntil('/login', (route) => false);
   }
@@ -83,13 +83,13 @@ class AppDrawer extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final profile = useProvider(profileProvider);
-    final count = useProvider(countProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(profileProvider);
+    final count = ref.watch(countProvider);
     final resetLocal = useResetLocal(context);
-    final fetchProfilePicture = useFetchProfilePicture(context);
-    final fetchProfile = useFetchProfile(context);
-    final fetchCount = useFetchCount(context);
+    final fetchProfilePicture = useFetchProfilePicture(ref);
+    final fetchProfile = useFetchProfile(ref);
+    final fetchCount = useFetchCount(context, ref);
     useEffect(() {
       if (!profile.isProfilePictureLoaded && !fetchProfilePicture.loading) {
         fetchProfilePicture.call();
@@ -189,7 +189,7 @@ class AppDrawer extends HookWidget {
             ListTile(
               title: Text('Logout'),
               onTap: () {
-                _logout(context);
+                _logout(context, ref);
                 resetLocal.call();
               },
             )

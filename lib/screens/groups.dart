@@ -8,7 +8,7 @@ import '../components/drawer.dart';
 import '../hooks/group.dart';
 import '../providers/groups.dart';
 
-class GroupScreen extends HookWidget {
+class GroupScreen extends HookConsumerWidget {
   const GroupScreen({Key? key}) : super(key: key);
 
   Widget _buildLoading() => const Center(
@@ -16,9 +16,9 @@ class GroupScreen extends HookWidget {
       );
 
   @override
-  Widget build(BuildContext context) {
-    final groupsData = useProvider(groupsProvider);
-    final fetchGroups = useFetchGroups(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final groupsData = ref.watch(groupsProvider);
+    final fetchGroups = useFetchGroups(ref);
     useEffect(() {
       fetchGroups.call();
     }, []);
@@ -63,7 +63,7 @@ class GroupScreen extends HookWidget {
   }
 }
 
-class _GroupListTile extends HookWidget {
+class _GroupListTile extends HookConsumerWidget {
   _GroupListTile({
     Key? key,
     required this.group,
@@ -71,13 +71,13 @@ class _GroupListTile extends HookWidget {
 
   final GroupResponse group;
 
-  void _delete(BuildContext context) async {
+  void _delete(WidgetRef ref) async {
     await ApiController.instance.group.deleteGroup(group.id);
-    context.read(groupsProvider.notifier).removeGroup(group.id);
+    ref.read(groupsProvider.notifier).removeGroup(group.id);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final loading = useState<bool>(false);
     return ListTile(
       title: Text(group.name),
@@ -86,7 +86,7 @@ class _GroupListTile extends HookWidget {
       trailing: IconButton(
         onPressed: () async {
           loading.value = true;
-          _delete(context);
+          _delete(ref);
           loading.value = false;
         },
         icon: Icon(Icons.delete),

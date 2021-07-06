@@ -10,16 +10,16 @@ import '../components/textfielddialog.dart';
 import '../providers/profile.dart';
 import '../hooks/profile.dart';
 
-class ProfileScreen extends HookWidget {
+class ProfileScreen extends HookConsumerWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final profile = useProvider(profileProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(profileProvider);
     final _firstName = useState<String>(profile.first_name ?? '');
     final _lastName = useState<String>(profile.last_name ?? '');
     final _profilePicture = useState<List<int>?>(profile.profile_picture);
-    final _updateProfile = useUpdateProfile(context);
+    final _updateProfile = useUpdateProfile(ref);
     return Scaffold(
       drawer: const AppDrawer(),
       appBar: AppBar(

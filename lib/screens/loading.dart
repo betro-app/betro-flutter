@@ -5,13 +5,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../hooks/auth.dart';
 import '../providers/auth.dart';
 
-class LoadingScreen extends HookWidget {
+class LoadingScreen extends HookConsumerWidget {
   const LoadingScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final auth = useProvider(authProvider);
-    final loadFromLocal = useLoadFromLocal(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.read(authProvider);
+    final loadFromLocal = useLoadFromLocal(ref);
     useEffect(() {
       if (!loadFromLocal.loading && auth.isLoaded && auth.isLoggedIn) {
         Future.delayed(Duration.zero,

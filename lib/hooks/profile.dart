@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -10,12 +9,12 @@ import 'common.dart';
 
 final _logger = Logger('hooks/profile');
 
-LoadingVoidCallback useFetchProfilePicture(BuildContext context) {
+LoadingVoidCallback useFetchProfilePicture(WidgetRef ref) {
   var loading = useState<bool>(false);
   final fetchProfilePicture = useCallback(() {
     loading.value = true;
     ApiController.instance.account.fetchProfilePicture().then((value) {
-      context.read(profileProvider.notifier).profilePictureLoaded(value);
+      ref.read(profileProvider.notifier).profilePictureLoaded(value);
       loading.value = false;
     }).catchError((e, s) {
       _logger.warning(e.toString(), e, s);
@@ -25,13 +24,13 @@ LoadingVoidCallback useFetchProfilePicture(BuildContext context) {
   return LoadingVoidCallback(loading.value, fetchProfilePicture);
 }
 
-LoadingVoidCallback useFetchProfile(BuildContext context) {
+LoadingVoidCallback useFetchProfile(WidgetRef ref) {
   var loading = useState<bool>(false);
   final fetchProfile = useCallback(() {
     loading.value = true;
     ApiController.instance.account.fetchWhoAmi().then((value) {
       if (value != null) {
-        context.read(profileProvider.notifier).profileLoaded(
+        ref.read(profileProvider.notifier).profileLoaded(
               user_id: value.user_id,
               username: value.username,
               email: value.email,
@@ -55,11 +54,11 @@ class UpdateProfile {
   UpdateProfile({this.first_name, this.last_name, this.profile_picture});
 }
 
-LoadingCallback<UpdateProfile> useUpdateProfile(BuildContext context) {
+LoadingCallback<UpdateProfile> useUpdateProfile(WidgetRef ref) {
   var loading = useState<bool>(false);
   final updateProfile = useCallback((UpdateProfile profile) async {
     loading.value = true;
-    final oldProfile = context.read(profileProvider);
+    final oldProfile = ref.read(profileProvider);
     UserProfile? value;
     if (oldProfile.first_name == null || oldProfile.first_name!.isEmpty) {
       value = await ApiController.instance.account.createProfile(
@@ -75,11 +74,11 @@ LoadingCallback<UpdateProfile> useUpdateProfile(BuildContext context) {
       );
     }
     if (value != null) {
-      context.read(profileProvider.notifier).profileLoaded(
+      ref.read(profileProvider.notifier).profileLoaded(
             first_name: value.first_name,
             last_name: value.last_name,
           );
-      context
+      ref
           .read(profileProvider.notifier)
           .profilePictureLoaded(value.profile_picture);
     }

@@ -5,11 +5,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../providers/groups.dart';
 import '../api/api.dart';
 
-class NewGroupScreen extends HookWidget {
+class NewGroupScreen extends HookConsumerWidget {
   const NewGroupScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final _nameController = useTextEditingController(text: '');
     final _default = useState<bool>(false);
     final _loading = useState<bool>(false);
@@ -29,7 +29,7 @@ class NewGroupScreen extends HookWidget {
                     );
                     _loading.value = false;
                     if (group != null) {
-                      context.read(groupsProvider.notifier).addGroup(group);
+                      ref.read(groupsProvider.notifier).addGroup(group);
                     }
                     Navigator.of(context).pop();
                   },
