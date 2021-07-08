@@ -5,7 +5,8 @@ import 'package:betro_dart_lib/betro_dart_lib.dart';
 
 import './auth.dart';
 import './helper.dart';
-import './types/FeedResource.dart';
+import './types/PostResource.dart';
+import './types/PostResourceUser.dart';
 import './types/GetPostResponse.dart';
 import './types/LikeResponse.dart';
 import './types/PostResponse.dart';

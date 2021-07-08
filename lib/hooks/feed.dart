@@ -2,6 +2,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../api/api.dart';
 import '../api/types/FeedResource.dart';
+import '../api/types/PostResource.dart';
 import '../api/types/PageInfo.dart';
 import 'common.dart';
 

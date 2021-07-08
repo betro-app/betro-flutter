@@ -5,6 +5,8 @@ import 'package:logging/logging.dart';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 
 import './types/FeedResource.dart';
+import './types/PostResource.dart';
+import './types/PostResourceUser.dart';
 import './types/PostResponse.dart';
 import './types/ProfileGrantRow.dart';
 import './types/PostUserResponse.dart';

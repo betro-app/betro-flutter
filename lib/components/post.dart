@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../api/types/FeedResource.dart';
+import '../api/types/PostResource.dart';
 import '../api/types/LikeResponse.dart';
 import '../api/types/UserInfo.dart';
 import '../utils/fromNow.dart';
@@ -95,7 +97,7 @@ class PostTile extends StatelessWidget {
     return [
       if (text_content != null)
         ListTile(
-          title: Text(text_content),
+          title: MarkdownBody(data: text_content),
           trailing: _buildCreatedAt(),
         ),
       if (media_content != null)
@@ -110,10 +112,29 @@ class PostTile extends StatelessWidget {
             frameBuilder: _frameBuilder,
           ),
         ),
-      PostLikeButton(
-        id: post.id,
-        likes: post.likes,
-        is_liked: post.is_liked,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          PostLikeButton(
+            id: post.id,
+            likes: post.likes,
+            is_liked: post.is_liked,
+          ),
+          IconButton(
+            icon: Icon(Icons.code),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Source'),
+                  content: Text(
+                    JsonEncoder.withIndent('  ').convert(post),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     ];
   }

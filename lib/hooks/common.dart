@@ -1,4 +1,4 @@
-import '../api/types/FeedResource.dart';
+import '../api/types/PostResource.dart';
 import '../api/types/PaginatedResponse.dart';
 import '../api/types/PageInfo.dart';
 

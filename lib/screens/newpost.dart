@@ -64,12 +64,13 @@ class NewPostScreen extends HookConsumerWidget {
           children: [
             ListTile(
               title: TextFormField(
+                maxLines: 8,
                 enabled: !disabled,
                 controller: _textController,
                 decoration: InputDecoration(
                   labelText: 'Text',
                 ),
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.multiline,
               ),
             ),
             ListTile(
