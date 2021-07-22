@@ -1,6 +1,7 @@
 import '../constants.dart';
 import 'auth.dart';
 import 'account.dart';
+import 'conversation.dart';
 import 'feed.dart';
 import 'follow.dart';
 import 'group.dart';
@@ -23,6 +24,7 @@ class ApiController {
 
   AccountController get account => AccountController(auth);
   FeedController get feed => FeedController(auth);
+  ConversationController get conversation => ConversationController(auth);
   FollowController get follow => FollowController(auth);
   GroupController get group => GroupController(auth);
   KeysController get keys => KeysController(auth);

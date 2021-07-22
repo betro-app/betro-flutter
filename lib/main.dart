@@ -19,6 +19,8 @@ import '../screens/posts.dart';
 import '../screens/newpost.dart';
 import '../screens/search.dart';
 import '../screens/notifications.dart';
+import '../screens/conversations.dart';
+import '../screens/messages.dart';
 import './theme.dart';
 
 final _logger = Logger('main');
@@ -50,6 +52,12 @@ class MyApp extends StatelessWidget {
           final args =
               ModalRoute.of(context)!.settings.arguments as UserScreenProps;
           return UserScreen(props: args);
+        },
+        '/conversations': (context) => ConversationsScreen(),
+        '/messages': (context) {
+          final args =
+              ModalRoute.of(context)!.settings.arguments as MessagesScreenProps;
+          return MessagesScreen(props: args);
         },
         '/groups': (context) => GroupScreen(),
         '/newgroup': (context) => NewGroupScreen(),

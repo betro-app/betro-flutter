@@ -144,6 +144,10 @@ class AppDrawer extends HookConsumerWidget {
               child: const Text('Groups'),
             ),
             ListTile(
+              title: Text('Messages'),
+              onTap: () => Navigator.of(context).pushNamed('/conversations'),
+            ),
+            ListTile(
               title: Text('Followers'),
               trailing:
                   count.isLoaded ? Text(count.followers.toString()) : null,
