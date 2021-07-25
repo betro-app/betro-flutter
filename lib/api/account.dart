@@ -73,6 +73,7 @@ class AccountController {
       'followees',
       'approvals',
       'posts',
+      'conversations',
     ];
     final response = await auth.client
         .get('/api/account/count?include_fields=${include_fields.join(",")}');

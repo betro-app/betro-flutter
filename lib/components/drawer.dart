@@ -143,6 +143,8 @@ class AppDrawer extends HookConsumerWidget {
             ),
             ListTile(
               title: Text('Messages'),
+              trailing:
+                  count.isLoaded ? Text(count.conversations.toString()) : null,
               onTap: () => Navigator.of(context).pushNamed('/conversations'),
             ),
             ListTile(

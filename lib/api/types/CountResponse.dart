@@ -11,16 +11,18 @@ class CountResponse {
   final int followees;
   final int approvals;
   final int posts;
+  final int conversations;
 
-  CountResponse(
-    this.notifications,
-    this.settings,
-    this.groups,
-    this.followers,
-    this.followees,
-    this.approvals,
-    this.posts,
-  );
+  CountResponse({
+    required this.notifications,
+    required this.settings,
+    required this.groups,
+    required this.followers,
+    required this.followees,
+    required this.approvals,
+    required this.posts,
+    required this.conversations,
+  });
   factory CountResponse.fromJson(Map<String, dynamic> json) =>
       _$CountResponseFromJson(json);
   Map<String, dynamic> toJson() => _$CountResponseToJson(this);

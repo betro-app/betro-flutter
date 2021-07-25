@@ -15,6 +15,7 @@ class Count extends StateNotifier<CountState> {
     int? followees,
     int? approvals,
     int? posts,
+    int? conversations,
   }) {
     state = state.copyWith(
       isLoaded: true,
@@ -25,6 +26,7 @@ class Count extends StateNotifier<CountState> {
       followees: followees,
       approvals: approvals,
       posts: posts,
+      conversations: conversations,
     );
   }
 
@@ -52,6 +54,9 @@ class Count extends StateNotifier<CountState> {
       case 'posts':
         state = state.copyWith(posts: (state.posts ?? 0) + value);
         break;
+      case 'conversations':
+        state =
+            state.copyWith(conversations: (state.conversations ?? 0) + value);
     }
   }
 
@@ -69,6 +74,7 @@ class CountState {
   final int? followees;
   final int? approvals;
   final int? posts;
+  final int? conversations;
 
   CountState({
     this.isLoaded = false,
@@ -79,6 +85,7 @@ class CountState {
     this.followees,
     this.approvals,
     this.posts,
+    this.conversations,
   });
 
   CountState copyWith({
@@ -90,6 +97,7 @@ class CountState {
     int? followees,
     int? approvals,
     int? posts,
+    int? conversations,
   }) =>
       CountState(
         isLoaded: isLoaded ?? this.isLoaded,
@@ -100,5 +108,6 @@ class CountState {
         followees: followees ?? this.followees,
         approvals: approvals ?? this.approvals,
         posts: posts ?? this.posts,
+        conversations: conversations ?? this.conversations,
       );
 }

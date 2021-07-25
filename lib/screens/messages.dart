@@ -39,38 +39,42 @@ class MessagesScreen extends HookConsumerWidget {
     }, []);
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(),
-        title: Text('Messages ${_conversation.username}'),
-      ),
+          leading: BackButton(),
+          title: Text('Messages ${_conversation.username}'),
+          actions: [
+            IconButton(
+              onPressed: fetchMessages.loading
+                  ? null
+                  : () {
+                      fetchMessages.call(true);
+                    },
+              icon: Icon(Icons.refresh),
+            )
+          ]),
       drawer: const AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return fetchMessages.call(true);
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Flexible(
-              child: ListFeed<MessageResponse>(
-                reverse: true,
-                shrinkWrap: true,
-                hook: fetchMessages,
-                itemBuilder: (d) => MessageListTile(
-                  conversation: _conversation,
-                  message: d,
-                ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Flexible(
+            child: ListFeed<MessageResponse>(
+              reverse: true,
+              shrinkWrap: true,
+              hook: fetchMessages,
+              itemBuilder: (d) => MessageListTile(
+                conversation: _conversation,
+                message: d,
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(8.0),
-              child: MessageInput(
-                conversation_id: _conversation.id,
-                public_key: _conversation.public_key,
-                private_key: _conversation.own_private_key,
-              ),
+          ),
+          Container(
+            padding: EdgeInsets.all(8.0),
+            child: MessageInput(
+              conversation_id: _conversation.id,
+              public_key: _conversation.public_key,
+              private_key: _conversation.own_private_key,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

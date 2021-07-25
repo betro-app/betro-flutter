@@ -19,6 +19,7 @@ LoadingVoidCallback useFetchCount(WidgetRef ref) {
               followees: value.followees,
               approvals: value.approvals,
               posts: value.posts,
+              conversations: value.conversations,
             );
       }
       loading.value = false;

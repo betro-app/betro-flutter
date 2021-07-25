@@ -37,7 +37,7 @@ LoadingPaginatedDataCallback<ConversationResource> useFetchConversations(
             );
       }
     }
-  }, []);
+  }, [response]);
   return LoadingPaginatedDataCallback<ConversationResource>(
     loaded: loaded.value,
     loading: loading.value,
