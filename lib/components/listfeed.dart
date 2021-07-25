@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -53,7 +54,7 @@ class ListFeed<T> extends HookWidget {
         }
         if (index >= paginatedData.data.length && paginatedData.next) {
           if (loadOnScroll && !loading) {
-            hook.call();
+            Timer.run(() => hook.call());
             return _buildLoading();
           } else {
             return Container(

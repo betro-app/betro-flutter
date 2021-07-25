@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../hooks/common.dart';
@@ -51,7 +52,7 @@ class PostsFeed extends StatelessWidget {
         }
         if (index >= posts.length && pageInfo.next) {
           if (loadOnScroll && !loading) {
-            hook.call();
+            Timer.run(() => hook.call());
             return _buildLoading();
           } else {
             return Container(

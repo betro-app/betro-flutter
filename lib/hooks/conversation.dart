@@ -91,11 +91,22 @@ LoadingPaginatedDataCallback<MessageResponse> useFetchMessages(
     loading.value = false;
     loaded.value = true;
     if (resp != null) {
-      ref
-          .read(conversationsProvider.notifier)
-          .messagesLoaded(conversation_id, resp);
+      if (messages == null || messages.data.isEmpty || messages.after == null) {
+        ref
+            .read(conversationsProvider.notifier)
+            .messagesLoaded(conversation_id, resp);
+      } else {
+        final data = messages.data;
+        data.addAll(resp.data);
+        ref.read(conversationsProvider.notifier).messagesLoaded(
+              conversation_id,
+              resp.copyWith(
+                data: data,
+              ),
+            );
+      }
     }
-  }, []);
+  }, [messages]);
 
   return LoadingPaginatedDataCallback<MessageResponse>(
     call: getResponse,
