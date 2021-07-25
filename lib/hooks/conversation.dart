@@ -75,7 +75,7 @@ LoadingPaginatedDataCallback<MessageResponse> useFetchMessages(
 ) {
   final loaded = useState<bool>(false);
   final loading = useState<bool>(false);
-  final messages = ref.read(conversationsProvider).messages[conversation_id];
+  final messages = ref.watch(conversationsProvider).messages[conversation_id];
   final after = messages == null ? null : messages.after;
   final getResponse = useCallback(([bool forceRefresh = false]) async {
     if (private_key == null || public_key == null) {
@@ -131,4 +131,41 @@ LoadingCallback<String> useSendMessage(
     }
   }, []);
   return LoadingCallback<String>(loading.value, getResponse);
+}
+
+void Function(MessageResponse) useProcessIncomingMessage(WidgetRef ref) {
+  final conversations = ref.read(conversationsProvider);
+  final getResponse = useCallback((MessageResponse message) async {
+    ConversationResource? _conversation;
+    _logger.fine(message.toJson());
+    if (conversations.data
+            .any((element) => element.id == message.conversation_id) ==
+        false) {
+      _conversation = await ApiController.instance.conversation
+          .fetchConversation(message.conversation_id);
+      if (_conversation != null) {
+        ref.read(conversationsProvider.notifier).conversationAdd(_conversation);
+      }
+    } else {
+      _conversation = conversations.data
+          .singleWhere((element) => element.id == message.conversation_id);
+    }
+    if (_conversation != null) {
+      final decryptedMessage = await ApiController.instance.conversation
+          .parseMessage(_conversation, message.message);
+      if (decryptedMessage != null) {
+        ref.read(conversationsProvider.notifier).messageAdd(
+              message.conversation_id,
+              MessageResponse(
+                id: message.id,
+                conversation_id: message.conversation_id,
+                sender_id: message.sender_id,
+                message: decryptedMessage,
+                created_at: message.created_at,
+              ),
+            );
+      }
+    }
+  }, []);
+  return getResponse;
 }

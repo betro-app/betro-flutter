@@ -1,13 +1,17 @@
 import 'dart:convert';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:logging/logging.dart';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
-import './types/PaginatedResponse.dart';
 
+import './types/PaginatedResponse.dart';
 import './auth.dart';
 import './helper.dart';
 import './types/ConversationResponse.dart';
 import './types/ConversationResource.dart';
 import './types/ConversationRequest.dart';
 import './types/MessageResponse.dart';
+
+final _logger = Logger('api/conversation');
 
 class ConversationController {
   final AuthController auth;
@@ -57,7 +61,7 @@ class ConversationController {
     final encryptionKey = auth.encryptionKey;
     if (encryptionKey == null) return null;
     final response = await auth.client
-        .get<Map<String, dynamic>>('/api/messages?$conversation_id');
+        .get<Map<String, dynamic>>('/api/messages/$conversation_id');
     final data = response.data;
     if (data == null) return null;
     final item = ConversationResponse.fromJson(data);
@@ -178,5 +182,49 @@ class ConversationController {
       after: resp.after,
     );
     return messages;
+  }
+
+  Future<String?> parseMessage(
+    ConversationResource conversation,
+    String message,
+  ) async {
+    final public_key = conversation.public_key;
+    final own_private_key = conversation.own_private_key;
+    if (public_key != null && own_private_key != null) {
+      final derivedKey =
+          await deriveExchangeSymKey(public_key, own_private_key);
+      final decryptedMessage = await symDecrypt(derivedKey, message);
+      return Utf8Decoder().convert(decryptedMessage);
+    }
+  }
+
+  void listenMessages(void Function(MessageResponse) messageEventListener) {
+    if (auth.channel == null) {
+      final hostArr = auth.host.split('://');
+      final host = hostArr[1];
+      final protocol = hostArr[0] == 'http' ? 'ws' : 'wss';
+      final uri = Uri.parse('$protocol://$host/messages');
+      final channel = WebSocketChannel.connect(uri);
+      auth.channel = channel;
+      final initialPayload = <String, dynamic>{
+        'action': 'login',
+        'token': auth.getToken()
+      };
+      channel.sink.add(jsonEncode(initialPayload));
+      channel.stream.listen(
+        (event) {
+          final payload = jsonDecode(event);
+          // if (payload['action'] == 'message') {
+          messageEventListener(MessageResponse.fromJson(payload));
+          // }
+        },
+        onError: (e, trace) {
+          _logger.info('WebSocket Error', e, trace);
+        },
+        onDone: () {
+          _logger.info('WebSocket Closed');
+        },
+      );
+    }
   }
 }

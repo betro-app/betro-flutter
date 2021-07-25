@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
@@ -48,6 +49,7 @@ class AuthController {
   String? encryptionKey;
   Uint8List? symKey;
   Map<String, EcdhKeyResource> ecdhKeys = {};
+  WebSocketChannel? channel;
   AuthController(this.host) : client = Dio(BaseOptions(baseUrl: host)) {
     client.options.headers['charset'] = 'UTF-8';
     client.options.headers['accept'] = 'application/json, text/plain, */*';

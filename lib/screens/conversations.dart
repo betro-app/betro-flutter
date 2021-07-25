@@ -1,3 +1,4 @@
+import 'package:betro/api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,8 +19,12 @@ class ConversationsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final fetchConversations = useFetchConversations(ref);
+    final processMessage = useProcessIncomingMessage(ref);
     useEffect(() {
       fetchConversations.call(true);
+      ApiController.instance.conversation.listenMessages((message) {
+        processMessage(message);
+      });
     }, []);
     return Scaffold(
       appBar: AppBar(
