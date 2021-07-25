@@ -9,10 +9,14 @@ class UserListTile extends HookWidget {
     Key? key,
     required this.user,
     this.allowNavigation = false,
+    this.allowActions = true,
+    this.onTap,
   }) : super(key: key);
 
   final UserInfo user;
   final bool allowNavigation;
+  final bool allowActions;
+  final Function()? onTap;
 
   String get _accountName {
     var _name = '';
@@ -35,16 +39,18 @@ class UserListTile extends HookWidget {
             ),
       title: Text(_accountName),
       subtitle: Text(user.username),
-      trailing: user.is_approved
-          ? Text('Already following')
-          : user.is_following
-              ? Text('Follow request sent')
-              : ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Follow'),
-                ),
-      onTap: allowNavigation == false
+      trailing: allowActions == false
           ? null
+          : user.is_approved
+              ? Text('Already following')
+              : user.is_following
+                  ? Text('Follow request sent')
+                  : ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Follow'),
+                    ),
+      onTap: allowNavigation == false
+          ? onTap
           : () {
               Navigator.of(context).pushNamed(
                 '/user',

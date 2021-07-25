@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../api/types/UserInfo.dart';
+import '../components/userinfo.dart';
 import '../api/types/ConversationResource.dart';
 import '../components/drawer.dart';
 import '../components/listfeed.dart';
@@ -31,8 +33,19 @@ class ConversationsScreen extends HookConsumerWidget {
         },
         child: ListFeed<ConversationResource>(
           hook: fetchConversations,
-          itemBuilder: (conversation) => ListTile(
-            title: Text(conversation.username),
+          itemBuilder: (conversation) => UserListTile(
+            user: UserInfo(
+              id: conversation.user_id,
+              is_approved: false,
+              is_following: false,
+              username: conversation.username,
+              public_key: conversation.public_key,
+              first_name: conversation.first_name,
+              last_name: conversation.last_name,
+              profile_picture: conversation.profile_picture,
+            ),
+            allowActions: false,
+            allowNavigation: false,
             onTap: () {
               Navigator.of(context).pushNamed(
                 '/messages',
