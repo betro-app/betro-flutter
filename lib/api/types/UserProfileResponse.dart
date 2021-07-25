@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'UserProfileResponse.g.dart';
@@ -22,7 +24,7 @@ class UserProfileResponse {
 
 class UserProfile {
   final String? sym_key;
-  final List<int>? profile_picture;
+  final Uint8List? profile_picture;
   final String? first_name;
   final String? last_name;
 

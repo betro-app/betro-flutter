@@ -67,7 +67,7 @@ class _ImagePickerUploaderWidgetState
 
   Future _takeProfilePicture() async {
     if (_imagePickerAvailable) {
-      final image = await _picker.getImage(source: ImageSource.camera);
+      final image = await _picker.pickImage(source: ImageSource.camera);
       if (image != null) {
         setState(() {
           _image = File(image.path);
@@ -79,7 +79,7 @@ class _ImagePickerUploaderWidgetState
 
   Future _selectProfilePicture() async {
     if (_imagePickerAvailable) {
-      final image = await _picker.getImage(source: ImageSource.gallery);
+      final image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         setState(() {
           _image = File(image.path);

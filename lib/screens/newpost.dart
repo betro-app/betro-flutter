@@ -111,7 +111,7 @@ class NewPostScreen extends HookConsumerWidget {
                     },
               child: _media.value == null
                   ? Text('No Picture found')
-                  : Image.memory(Uint8List.fromList(_media.value!)),
+                  : Image.memory(_media.value!),
             )
           ],
         ),

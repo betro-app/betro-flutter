@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final profileProvider = StateNotifierProvider<Profile, ProfileState>((ref) {
@@ -24,7 +26,7 @@ class Profile extends StateNotifier<ProfileState> {
     );
   }
 
-  void profilePictureLoaded(List<int>? profile_picture) {
+  void profilePictureLoaded(Uint8List? profile_picture) {
     state = state.copyWith(
       isProfilePictureLoaded: true,
       profile_picture: profile_picture,
@@ -44,7 +46,7 @@ class ProfileState {
   final String? email;
   final String? first_name;
   final String? last_name;
-  final List<int>? profile_picture;
+  final Uint8List? profile_picture;
 
   ProfileState({
     this.isLoaded = false,
@@ -65,7 +67,7 @@ class ProfileState {
     String? email,
     String? first_name,
     String? last_name,
-    List<int>? profile_picture,
+    Uint8List? profile_picture,
   }) =>
       ProfileState(
         isLoaded: isLoaded ?? this.isLoaded,

@@ -10,10 +10,16 @@ class ListFeed<T> extends HookWidget {
     Key? key,
     required this.hook,
     required this.itemBuilder,
+    this.reverse = false,
+    this.shrinkWrap = false,
+    this.controller,
   }) : super(key: key);
 
   final LoadingPaginatedDataCallback<T> hook;
   final Widget Function(T) itemBuilder;
+  final bool reverse;
+  final bool shrinkWrap;
+  final ScrollController? controller;
 
   Widget _buildLoading() => const Center(
         child: CircularProgressIndicator(),
@@ -29,6 +35,9 @@ class ListFeed<T> extends HookWidget {
             ? paginatedData.data.length + 1
             : paginatedData.data.length);
     return ListView.builder(
+      controller: controller,
+      shrinkWrap: shrinkWrap,
+      reverse: reverse,
       itemCount: itemCount,
       itemBuilder: (context, index) {
         final loading = hook.loading;

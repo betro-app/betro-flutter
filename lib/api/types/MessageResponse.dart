@@ -18,6 +18,6 @@ class MessageResponse {
   });
   factory MessageResponse.fromJson(Map<String, dynamic> json) =>
       _$MessageResponseFromJson(json);
-  @override
+
   Map<String, dynamic> toJson() => _$MessageResponseToJson(this);
 }

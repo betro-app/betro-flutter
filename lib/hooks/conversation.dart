@@ -25,7 +25,7 @@ LoadingPaginatedDataCallback<ConversationResource> useFetchConversations(
     loading.value = false;
     loaded.value = true;
     if (resp != null) {
-      if (response.data.isEmpty) {
+      if (response.data.isEmpty || response.after == null) {
         ref.read(conversationsProvider.notifier).conversationsLoaded(resp);
       } else {
         final data = response.data;
@@ -46,22 +46,25 @@ LoadingPaginatedDataCallback<ConversationResource> useFetchConversations(
   );
 }
 
-Future<Null> Function() useCreateConversation(
+LoadingCallback<void> useCreateConversation(
   String? user_id,
   String? user_key_id,
   WidgetRef ref,
 ) {
-  final getResponse = useCallback(() async {
+  final loading = useState<bool>(false);
+  final getResponse = useCallback((void _) async {
     if (user_id == null || user_key_id == null) {
       return;
     }
+    loading.value = true;
     final resp = await ApiController.instance.conversation
         .createConversation(user_id, user_key_id);
+    loading.value = false;
     if (resp != null) {
       ref.read(conversationsProvider.notifier).conversationAdd(resp);
     }
   }, []);
-  return getResponse;
+  return LoadingCallback<void>(loading.value, getResponse);
 }
 
 LoadingPaginatedDataCallback<MessageResponse> useFetchMessages(
@@ -102,27 +105,30 @@ LoadingPaginatedDataCallback<MessageResponse> useFetchMessages(
   );
 }
 
-Future<Null> Function(String) useSendMessage(
+LoadingCallback<String> useSendMessage(
   String conversation_id,
   String? public_key,
   String? private_key,
   WidgetRef ref,
 ) {
+  final loading = useState<bool>(false);
   final getResponse = useCallback((String text_content) async {
     if (private_key == null || public_key == null) {
       return;
     }
+    loading.value = true;
     final resp = await ApiController.instance.conversation.sendMessage(
       conversation_id,
       private_key,
       public_key,
       text_content,
     );
+    loading.value = false;
     if (resp != null) {
       ref
           .read(conversationsProvider.notifier)
           .messageAdd(conversation_id, resp);
     }
   }, []);
-  return getResponse;
+  return LoadingCallback<String>(loading.value, getResponse);
 }

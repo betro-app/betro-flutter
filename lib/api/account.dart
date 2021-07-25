@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
@@ -16,7 +17,7 @@ class AccountController {
   final AuthController auth;
   AccountController(this.auth);
 
-  Future<List<int>?> fetchProfilePicture() async {
+  Future<Uint8List?> fetchProfilePicture() async {
     final symKey = auth.symKey;
     if (symKey == null) return null;
     try {
@@ -25,7 +26,7 @@ class AccountController {
           options: Options(responseType: ResponseType.plain));
       final data = response.data;
       if (data != null && data.isNotEmpty) {
-        return await symDecryptBuffer(symKey, data);
+        return Uint8List.fromList(await symDecryptBuffer(symKey, data));
       }
     } on DioError catch (e) {
       if (e.response?.statusCode == 404) {
@@ -102,7 +103,7 @@ class AccountController {
           : utf8.decode(await symDecrypt(symDecrypted, last_name)),
       profile_picture: profile_picture == null
           ? null
-          : await symDecrypt(symDecrypted, profile_picture),
+          : Uint8List.fromList(await symDecrypt(symDecrypted, profile_picture)),
     );
   }
 

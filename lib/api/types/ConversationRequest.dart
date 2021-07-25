@@ -15,6 +15,6 @@ class ConversationRequest {
   });
   factory ConversationRequest.fromJson(Map<String, dynamic> json) =>
       _$ConversationRequestFromJson(json);
-  @override
+
   Map<String, dynamic> toJson() => _$ConversationRequestToJson(this);
 }

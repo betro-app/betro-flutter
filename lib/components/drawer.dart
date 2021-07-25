@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -117,7 +115,7 @@ class AppDrawer extends HookConsumerWidget {
               accountEmail: Text(profile.email ?? ''),
               currentAccountPicture: profile.profile_picture == null
                   ? null
-                  : Image.memory(Uint8List.fromList(profile.profile_picture!)),
+                  : Image.memory(profile.profile_picture!),
             ),
             ListTile(
               title: Text('Home'),

@@ -17,7 +17,7 @@ class ConversationsScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final fetchConversations = useFetchConversations(ref);
     useEffect(() {
-      fetchConversations.call();
+      fetchConversations.call(true);
     }, []);
     return Scaffold(
       appBar: AppBar(
