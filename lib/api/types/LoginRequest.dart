@@ -6,8 +6,9 @@ part 'LoginRequest.g.dart';
 class LoginRequest {
   final String email;
   final String master_hash;
+  final String device_display_name;
 
-  LoginRequest(this.email, this.master_hash);
+  LoginRequest(this.email, this.master_hash, this.device_display_name);
   factory LoginRequest.fromJson(Map<String, dynamic> json) =>
       _$LoginRequestFromJson(json);
   Map<String, dynamic> toJson() => _$LoginRequestToJson(this);

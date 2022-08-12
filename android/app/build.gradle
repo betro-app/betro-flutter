@@ -11,6 +11,11 @@ if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -22,22 +27,21 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-    
-    def versionPropsFile = file('version.properties')
-
-    def Properties versionProps = new Properties()
-
-    if(versionPropsFile.exists())
-        versionProps.load(new FileInputStream(versionPropsFile))
 
     List<String> runTasks = gradle.startParameter.getTaskNames();
     def value = 0
@@ -45,22 +49,22 @@ android {
     if ( item.contains("assembleRelease") || item.contains("bundleRelease")) {
         value = 1;
     }
-    def code = Integer.parseInt(versionProps['VERSION_CODE']  ?: "0" ).intValue() + value
+    def code = Integer.parseInt(localProperties.getProperty('flutter.versionCode') ?: 0).intValue() + value
     if (System.env.BUILD_NUMBER) {
         code = code + Integer.valueOf(System.env.BUILD_NUMBER ?: 0);
     }
     for (String item : runTasks)
     if ( item.contains("assembleRelease") || item.contains("bundleRelease")) {
-        versionProps['VERSION_CODE']=code.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
+        localProperties['flutter.versionCode']=code.toString()
+        localProperties.store(localPropertiesFile.newWriter(), null)
     }
 
     defaultConfig {
         applicationId "com.example.betro"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode code
-        versionName '0.0.1'
+        versionName flutterVersionName
     }
 
     signingConfigs {

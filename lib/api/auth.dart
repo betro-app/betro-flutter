@@ -95,8 +95,9 @@ class AuthController {
   Future<void> login(String email, String password) async {
     final masterKey = await getMasterKey(email, password);
     final masterHash = await getMasterHash(masterKey, password);
+    const device_display_name = "Flutter";
     final response = await client.post('/api/login',
-        data: jsonEncode(LoginRequest(email, masterHash)));
+        data: jsonEncode(LoginRequest(email, masterHash, device_display_name)));
     encryptionKey = await getEncryptionKeys(masterKey);
     final token = TokenResponse.fromJson(response.data).token;
     _logger.finest(token);
