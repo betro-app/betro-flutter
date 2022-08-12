@@ -196,6 +196,7 @@ class ConversationController {
       final decryptedMessage = await symDecrypt(derivedKey, message);
       return Utf8Decoder().convert(decryptedMessage);
     }
+    return null;
   }
 
   void listenMessages(void Function(MessageResponse) messageEventListener) {

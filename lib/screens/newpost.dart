@@ -32,6 +32,7 @@ class NewPostScreen extends HookConsumerWidget {
           _selectedGroup.value = groups.first;
         }
       }
+      return null;
     }, [groupsData.isLoaded]);
     final disabled = !groupsData.isLoaded || _loading.value;
     return Scaffold(

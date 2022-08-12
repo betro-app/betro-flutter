@@ -15,6 +15,7 @@ class HomeScreen extends HookWidget {
     useEffect(() {
       ApiController.instance.keys.fetchKeys();
       fetchHomeFeed.call();
+      return null;
     }, []);
     return Scaffold(
       appBar: AppBar(

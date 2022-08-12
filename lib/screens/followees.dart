@@ -17,6 +17,7 @@ class FolloweesScreen extends HookWidget {
     final fetchFollowees = useFetchFollowees();
     useEffect(() {
       fetchFollowees.call();
+      return null;
     }, []);
     return Scaffold(
       appBar: AppBar(

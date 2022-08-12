@@ -76,7 +76,7 @@ LoadingPaginatedDataCallback<MessageResponse> useFetchMessages(
   final loaded = useState<bool>(false);
   final loading = useState<bool>(false);
   final messages = ref.watch(conversationsProvider).messages[conversation_id];
-  final after = messages == null ? null : messages.after;
+  final after = messages?.after;
   final getResponse = useCallback(([bool forceRefresh = false]) async {
     if (private_key == null || public_key == null) {
       return;

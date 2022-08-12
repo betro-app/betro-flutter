@@ -13,6 +13,7 @@ class PostsScreen extends HookWidget {
     final fetchOwnFeed = useFetchOwnFeed(null);
     useEffect(() {
       fetchOwnFeed.call();
+      return null;
     }, []);
     return Scaffold(
       appBar: AppBar(

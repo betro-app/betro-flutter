@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:pedantic/pedantic.dart';
 import 'package:betro_dart_lib/betro_dart_lib.dart';
 import 'package:logging/logging.dart';
 

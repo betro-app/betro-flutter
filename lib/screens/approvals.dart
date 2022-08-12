@@ -17,6 +17,7 @@ class ApprovalsScreen extends HookWidget {
     final fetchApprovals = useFetchPendingApprovals();
     useEffect(() {
       fetchApprovals.call();
+      return null;
     }, []);
     return Scaffold(
       appBar: AppBar(

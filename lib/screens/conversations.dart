@@ -25,6 +25,7 @@ class ConversationsScreen extends HookConsumerWidget {
       ApiController.instance.conversation.listenMessages((message) {
         processMessage(message);
       });
+      return null;
     }, []);
     return Scaffold(
       appBar: AppBar(

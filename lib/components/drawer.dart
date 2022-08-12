@@ -42,7 +42,7 @@ class AppDrawerBadgeListTile extends StatelessWidget {
               shape: BadgeShape.circle,
               borderRadius: BorderRadius.circular(100),
               badgeColor: Theme.of(context).primaryColor,
-              badgeContent: Container(
+              badgeContent: SizedBox(
                 height: 5,
                 width: 5,
               ),
@@ -98,6 +98,7 @@ class AppDrawer extends HookConsumerWidget {
       if (!count.isLoaded && !fetchCount.loading) {
         fetchCount.call();
       }
+      return null;
     }, [
       profile.isLoaded,
       profile.isProfilePictureLoaded,

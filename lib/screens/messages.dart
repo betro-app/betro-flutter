@@ -36,6 +36,7 @@ class MessagesScreen extends HookConsumerWidget {
         _conversation.own_private_key, _conversation.public_key, ref);
     useEffect(() {
       fetchMessages.call();
+      return null;
     }, []);
     return Scaffold(
       appBar: AppBar(

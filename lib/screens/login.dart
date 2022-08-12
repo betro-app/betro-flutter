@@ -39,6 +39,7 @@ class LoginScreen extends HookConsumerWidget {
     final _isMounted = useIsMounted();
     useEffect(() {
       isSecureStorageAvailable.call();
+      return null;
     }, []);
     return SafeArea(
       child: Scaffold(

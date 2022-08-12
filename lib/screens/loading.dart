@@ -22,6 +22,7 @@ class LoadingScreen extends HookConsumerWidget {
       } else {
         loadFromLocal.call();
       }
+      return null;
     }, [auth.isLoaded, auth.isLoggedIn]);
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.light

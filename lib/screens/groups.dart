@@ -21,6 +21,7 @@ class GroupScreen extends HookConsumerWidget {
     final fetchGroups = useFetchGroups(ref);
     useEffect(() {
       fetchGroups.call();
+      return null;
     }, []);
     final loaded = groupsData.isLoaded;
     final groups = groupsData.groups;

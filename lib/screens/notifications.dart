@@ -18,6 +18,7 @@ class NotificationsScreen extends HookWidget {
         _data.value = value;
         _loading.value = false;
       });
+      return null;
     });
     return Scaffold(
       appBar: AppBar(

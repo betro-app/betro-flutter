@@ -38,6 +38,7 @@ class UserScreen extends HookWidget {
     useEffect(() {
       fetchUser.call();
       fetchUserFeed.call();
+      return null;
     }, []);
     return Scaffold(
       drawer: const AppDrawer(),
