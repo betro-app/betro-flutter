@@ -1,1 +1,1 @@
-const DEFAULT_HOST = 'https://betro.easycode.club';
+const DEFAULT_HOST = 'https://betro.autouptime.online';

@@ -31,7 +31,8 @@ jobs:
 
       - uses: actions/setup-java@v2
         with:
-          java-version: "18.x"
+          distribution: "adopt"
+          java-version: "18"
 
       - name: Cache Flutter dependencies
         uses: actions/cache@v3
